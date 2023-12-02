@@ -71,6 +71,12 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.MyHold
         return dataList.size();
     }
 
+    public void setDataList(List<String> dataList) {
+        this.dataList = dataList;
+        notifyDataSetChanged();
+        //数据集发生变化时，需要通知
+    }
+
     //MyHolder其实就是一个View,也就是要展示的布局
     static class MyHolder extends RecyclerView.ViewHolder {
         TextView diningHall_name;
@@ -93,4 +99,5 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.MyHold
     public interface LeftListOnClickItemListener {
         void onItemClick(int position);//接收点某个具体项的操作函数
     }
+
 }

@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.db.UserDbHelper;
 import com.example.myapplication.fragment.RecipesFragment;
 import com.example.myapplication.fragment.UsersFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,20 +55,31 @@ public class MainActivity extends AppCompatActivity {
             if (usersFragment == null) {
                 //还没有加载过这个布局
                 usersFragment = new UsersFragment();
-                fragmentTransaction.add(R.id.content,usersFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
-            }
-            else{
+                fragmentTransaction.add(R.id.content, usersFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
+            } else {
                 fragmentTransaction.show(usersFragment);//因为之前一定加载过，所以系统会自动知道加到哪个容器里
             }
-        }
-        else{
+        } else {
             //此时是菜品管理界面
             if (recipesFragment == null) {
                 //还没有加载过这个布局
                 recipesFragment = new RecipesFragment();
-                fragmentTransaction.add(R.id.content,recipesFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
-            }
-            else{
+                //一定要在这里设置监听，否则会取null
+                recipesFragment.setMyAddCanteenOnClickItemListener(new RecipesFragment.AddCanteenOnClickItemListener() {
+                    @Override
+                    public void AddCanteenOnClick() {
+                        int row = CanteenDbHelper.getInstance(MainActivity.this).addCanteen("测试食堂名");
+                        row = CanteenDbHelper.getInstance(MainActivity.this).addCanteen("测试食堂名2");
+                        recipesFragment.loadData();
+                        if (row > 0)
+                            Toast.makeText(MainActivity.this, "成功写入数据库", Toast.LENGTH_SHORT).show();
+                        else {
+                            Toast.makeText(MainActivity.this, "写入数据库失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                fragmentTransaction.add(R.id.content, recipesFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
+            } else {
                 fragmentTransaction.show(recipesFragment);//因为之前一定加载过，所以系统会自动知道加到哪个容器里
             }
         }

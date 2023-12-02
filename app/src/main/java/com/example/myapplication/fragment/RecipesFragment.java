@@ -9,15 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.LeftListAdapter;
+import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.entity.CanteenInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesFragment extends Fragment {
-    private View rootView;
+    private View rootView; //rootView就是当前recipe的界面
     private RecyclerView leftRecyclerView;
     private LeftListAdapter myListAdapter;//初始化控件时，也需要该适配器
     private List<String> leftDataList = new ArrayList<>();//食堂名数据
@@ -37,15 +41,17 @@ public class RecipesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        leftDataList.add("学一食堂");
-        leftDataList.add("学二食堂");
-        leftDataList.add("学三食堂");
-        leftDataList.add("学四食堂");
-        leftDataList.add("学五食堂");
-        leftDataList.add("学六食堂");
-        leftDataList.add("教工餐厅");
-        leftDataList.add("清真餐厅");
+//        leftDataList.add("学一食堂");
+//        leftDataList.add("学二食堂");
+//        leftDataList.add("学三食堂");
+//        leftDataList.add("学四食堂");
+//        leftDataList.add("学五食堂");
+//        leftDataList.add("学六食堂");
+//        leftDataList.add("教工餐厅");
+//        leftDataList.add("清真餐厅");
+        //从数据库中设置数据
         myListAdapter = new LeftListAdapter(leftDataList);//适配器需要数据接口
+        loadData();
         leftRecyclerView.setAdapter(myListAdapter);//为当前左面列表设置适配器
 
         //recycleView的点击事件
@@ -55,5 +61,35 @@ public class RecipesFragment extends Fragment {
                 myListAdapter.setCurrentIndex(position);//当发生点击事件时，需要更改页面
             }
         });
+
+        //食堂添加按钮点击
+        rootView.findViewById(R.id.add_canteen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (myAddCanteenOnClickItemListener != null) {
+                    myAddCanteenOnClickItemListener.AddCanteenOnClick();
+                }
+            }
+        });
     }
+
+    public void loadData() {
+        leftDataList.clear();
+        List<CanteenInfo> canteenInfoList = CanteenDbHelper.getInstance(getActivity()).queryCanteenListData();
+        for (int i = 0; i < canteenInfoList.size(); i++) {
+            leftDataList.add(canteenInfoList.get(i).getCanteen_name());
+        }
+        myListAdapter.setDataList(leftDataList);
+    }
+
+    //点击添加食堂按钮的逻辑
+    public interface AddCanteenOnClickItemListener {
+        void AddCanteenOnClick();//点击了添加按钮
+    }
+
+    public void setMyAddCanteenOnClickItemListener(AddCanteenOnClickItemListener myAddCanteenOnClickItemListener) {
+        this.myAddCanteenOnClickItemListener = myAddCanteenOnClickItemListener;
+    }
+
+    private AddCanteenOnClickItemListener myAddCanteenOnClickItemListener;
 }
