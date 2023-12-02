@@ -19,7 +19,7 @@
         android:layout_height="match_parent">
 
         <!--左面-->
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="100dp"
             android:background="#f5f5f5"
             android:layout_height="match_parent">
@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="0dp"
                 tools:listitem="@layout/recipes_left_list_item" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--右面-->
         <androidx.appcompat.widget.LinearLayoutCompat
