@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.dialog.AddWindowActivity;
@@ -21,12 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private RecipesFragment recipesFragment;
     private UsersFragment usersFragment;
     private BottomNavigationView myBottomNavigationView;
+    private String now_show_canteen_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        WindowDbHelper.getInstance(MainActivity.this).addWindow("窗口1", "1");
+
         //初始化控件
         myBottomNavigationView = findViewById(R.id.bottomNavigationView);
         //导航栏被选择时的事件
@@ -127,13 +129,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         if (recipesFragment != null) {
             recipesFragment.loadData();
+            if (now_show_canteen_name != null) {
+                recipesFragment.loadRightData(now_show_canteen_name);
+            }
         }
         super.onResume();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (resultCode) {
+        switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
                     //1是修改食堂名活动返回
@@ -145,15 +150,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case 2:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     //2是添加窗口活动返回
-                    String canteen_name = data.getStringExtra("canteen_name");
-                    if(recipesFragment!=null){
+                    now_show_canteen_name = data.getStringExtra("canteen_name");
+                    Toast.makeText(this, now_show_canteen_name + "a", Toast.LENGTH_SHORT).show();
+                    if (recipesFragment != null) {
                         recipesFragment.loadData();
-                        recipesFragment.loadRightData(canteen_name);
+                        recipesFragment.loadRightData(now_show_canteen_name);
                     }
                 }
+                break;
             default:
         }
+
     }
 }
