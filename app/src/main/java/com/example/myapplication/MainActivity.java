@@ -1,19 +1,20 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.myapplication.db.CanteenDbHelper;
-import com.example.myapplication.db.UserDbHelper;
+import com.example.myapplication.db.WindowDbHelper;
+import com.example.myapplication.dialog.AddWindowActivity;
+import com.example.myapplication.dialog.ModifyCanteenActivity;
 import com.example.myapplication.fragment.RecipesFragment;
 import com.example.myapplication.fragment.UsersFragment;
+import com.example.myapplication.dialog.AddCanteenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        WindowDbHelper.getInstance(MainActivity.this).addWindow("窗口1", "1");
         //初始化控件
         myBottomNavigationView = findViewById(R.id.bottomNavigationView);
         //导航栏被选择时的事件
@@ -78,6 +79,23 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         //  recipesFragment.loadData();
                     }
+
+                    @Override
+                    public void ModifyOnClick() {
+                        Intent intent = new Intent(MainActivity.this, ModifyCanteenActivity.class);
+                        startActivityForResult(intent, 1);//1是请求码，用于确定是要启动哪个活动
+                    }
+
+                    @Override
+                    public void DeleteOnClick() {
+
+                    }
+
+                    @Override
+                    public void AddWindowOnClick() {
+                        Intent intent = new Intent(MainActivity.this, AddWindowActivity.class);
+                        startActivityForResult(intent, 2);//2是请求码，用于确定是要启动哪个活动
+                    }
                 });
                 fragmentTransaction.add(R.id.content, recipesFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
             } else {
@@ -107,8 +125,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (recipesFragment != null)
+        if (recipesFragment != null) {
             recipesFragment.loadData();
+        }
         super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (resultCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    //1是修改食堂名活动返回
+                    String after_canteen_name = data.getStringExtra("after_canteen_name");
+                    if (recipesFragment != null) {
+                        recipesFragment.loadData();
+                        recipesFragment.loadRightData(after_canteen_name);
+                    }
+                }
+                break;
+            case 2:
+                if(resultCode == RESULT_OK){
+                    //2是添加窗口活动返回
+                    String canteen_name = data.getStringExtra("canteen_name");
+                    if(recipesFragment!=null){
+                        recipesFragment.loadData();
+                        recipesFragment.loadRightData(canteen_name);
+                    }
+                }
+            default:
+        }
     }
 }

@@ -20,16 +20,30 @@
             android:background="@drawable/login_et_bg">
 
             <EditText
-                android:id="@+id/et_canteen_name"
+                android:id="@+id/et_before_canteen_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
-                android:hint="请输入食堂名"
+                android:hint="请输入更改前的食堂名"
                 android:textColorHint="#808080"
                 android:textSize="14sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/login_et_bg">
 
+            <EditText
+                android:id="@+id/et_after_canteen_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="请输入更改后的食堂名"
+                android:textColorHint="#808080"
+                android:textSize="14sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <Button
             android:id="@+id/commit"

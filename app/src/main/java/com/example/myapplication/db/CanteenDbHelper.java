@@ -85,14 +85,14 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
     }
 
     //TODO 在这里根据自己的业务需求，编写增删改查的方法，如下所示
-    public int updateCanteen(int canteen_id, String canteen_name) {
+    public int updateCanteen(String before_canteen_name, String canteen_name) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 填充占位符
         ContentValues values = new ContentValues();
         values.put("canteen_name", canteen_name);
         // 执行SQL
-        int update = db.update("canteen_table", values, " canteen_id=?", new String[]{canteen_id + ""});
+        int update = db.update("canteen_table", values, " canteen_name=?", new String[]{before_canteen_name});
         // 关闭数据库连接
         db.close();
         return update;
@@ -115,5 +115,6 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
 }
 

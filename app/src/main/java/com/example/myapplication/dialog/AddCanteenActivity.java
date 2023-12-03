@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.myapplication.R;
 import com.example.myapplication.db.CanteenDbHelper;
-import com.example.myapplication.fragment.RecipesFragment;
 
 public class AddCanteenActivity extends AppCompatActivity {
     private EditText et_canteen_name;

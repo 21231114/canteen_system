@@ -28,9 +28,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddCanteenActivity"
+            android:name=".dialog.AddCanteenActivity"
             android:exported="false"
-            android:theme="@style/DialogActivity"/>
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".dialog.ModifyCanteenActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".dialog.AddWindowActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>

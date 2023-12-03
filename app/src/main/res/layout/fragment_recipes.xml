@@ -45,23 +45,51 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/add_canteen"
                 tools:layout_editor_absoluteX="-4dp"
-                tools:listitem="@layout/recipes_left_list_item" />
+                tools:listitem="@layout/recipes_left_list_item"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--右面-->
 
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="50dp" >
 
+                <Button
+                    android:id="@+id/modify_canteen"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="修改食堂名" />
+
+                <Button
+                    android:id="@+id/add_window"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="添加窗口" />
+
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rightRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="636dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/linear"
+                tools:layout_editor_absoluteX="-4dp"
+                tools:listitem="@layout/recipes_right_list_item"
+                tools:ignore="MissingConstraints"/>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

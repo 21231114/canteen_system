@@ -65,6 +65,10 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.MyHold
         notifyDataSetChanged();
     }
 
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
     //返回数据集大小
     @Override
     public int getItemCount() {
