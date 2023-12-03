@@ -27,6 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddCanteenActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity"/>
     </application>
 
 </manifest>

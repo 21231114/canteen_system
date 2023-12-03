@@ -17,10 +17,11 @@ import com.example.myapplication.adapter.LeftListAdapter;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment{
     private View rootView; //rootView就是当前recipe的界面
     private RecyclerView leftRecyclerView;
     private LeftListAdapter myListAdapter;//初始化控件时，也需要该适配器
@@ -68,6 +69,7 @@ public class RecipesFragment extends Fragment {
             public void onClick(View view) {
                 if (myAddCanteenOnClickItemListener != null) {
                     myAddCanteenOnClickItemListener.AddCanteenOnClick();
+//                    loadData();
                 }
             }
         });

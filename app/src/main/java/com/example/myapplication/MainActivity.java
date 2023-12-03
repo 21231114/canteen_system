@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -68,14 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 recipesFragment.setMyAddCanteenOnClickItemListener(new RecipesFragment.AddCanteenOnClickItemListener() {
                     @Override
                     public void AddCanteenOnClick() {
-                        int row = CanteenDbHelper.getInstance(MainActivity.this).addCanteen("测试食堂名");
-                        row = CanteenDbHelper.getInstance(MainActivity.this).addCanteen("测试食堂名2");
-                        recipesFragment.loadData();
-                        if (row > 0)
-                            Toast.makeText(MainActivity.this, "成功写入数据库", Toast.LENGTH_SHORT).show();
-                        else {
-                            Toast.makeText(MainActivity.this, "写入数据库失败", Toast.LENGTH_SHORT).show();
-                        }
+                        //需要在跳转到对话时，传入recipeFragment
+                        Intent intent = new Intent(MainActivity.this, AddCanteenActivity.class);
+                        //intent类型传递对象时,一定要实现一个Serializable,将对象转换为字节流
+                        //踩过的坑，fragment不能这么传，因为不能序列化
+//                        intent.putExtra("recipeFragmentId", );
+                        startActivity(intent);
+                        //  recipesFragment.loadData();
                     }
                 });
                 fragmentTransaction.add(R.id.content, recipesFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
@@ -96,5 +97,18 @@ public class MainActivity extends AppCompatActivity {
         if (usersFragment != null) {
             fragmentTransaction.hide(usersFragment);
         }
+    }
+    /*
+    当从其其他活动返回到主活动,需要更新数据
+    需要通过钩子函数去实时更新数据
+    需要注意因为调用的是dialog类型的activity
+    所以不会走onRestart
+     */
+
+    @Override
+    protected void onResume() {
+        if (recipesFragment != null)
+            recipesFragment.loadData();
+        super.onResume();
     }
 }
