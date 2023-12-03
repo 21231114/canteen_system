@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 
 public class AddWindowActivity extends AppCompatActivity {
@@ -26,16 +27,26 @@ public class AddWindowActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String canteen_name = et_canteen_name.getText().toString();
                 String window_name = et_window_name.getText().toString();
-                int row = WindowDbHelper.getInstance(AddWindowActivity.this).addWindow(window_name, canteen_name);
-                if (row > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra("canteen_name", canteen_name);//需要告诉MainActivity应该更新哪一个食堂界面
-                    setResult(RESULT_OK, intent);
-                    Toast.makeText(AddWindowActivity.this, "成功写入数据库", Toast.LENGTH_SHORT).show();
+                if (CanteenDbHelper.getInstance(AddWindowActivity.this).isHasCanteen(canteen_name) == null) {
+                    Toast.makeText(AddWindowActivity.this, "食堂不存在", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
-                    Toast.makeText(AddWindowActivity.this, "写入数据库失败", Toast.LENGTH_SHORT).show();
+                    if (WindowDbHelper.getInstance(AddWindowActivity.this).isHasWindow(canteen_name, window_name) != null) {
+                        Toast.makeText(AddWindowActivity.this, "食堂已经拥有这个窗口", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        int row = WindowDbHelper.getInstance(AddWindowActivity.this).addWindow(window_name, canteen_name);
+                        if (row > 0) {
+                            Intent intent = new Intent();
+                            intent.putExtra("canteen_name", canteen_name);//需要告诉MainActivity应该更新哪一个食堂界面
+                            setResult(RESULT_OK, intent);
+                            Toast.makeText(AddWindowActivity.this, "成功写入数据库", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddWindowActivity.this, "写入数据库失败", Toast.LENGTH_SHORT).show();
+                        }
+                        finish();
+                    }
                 }
-                finish();
             }
         });
     }

@@ -27,17 +27,23 @@ public class ModifyCanteenActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String before_canteen_name = et_before_canteen_name.getText().toString();//更改前的食堂名
                 String after_canteen_name = et_after_canteen_name.getText().toString();//更改后的食堂名
-                int row = CanteenDbHelper.getInstance(ModifyCanteenActivity.this).updateCanteen(before_canteen_name, after_canteen_name);
-                if (row == 0) {
-                    Toast.makeText(ModifyCanteenActivity.this, "修改食堂名失败", Toast.LENGTH_SHORT).show();
+                if (CanteenDbHelper.getInstance(ModifyCanteenActivity.this).isHasCanteen(after_canteen_name) != null) {
+                    //已经拥有食堂，不满足unique
+                    Toast.makeText(ModifyCanteenActivity.this, "修改后的食堂名已经存在", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    WindowDbHelper.getInstance(ModifyCanteenActivity.this).updateWindowCanteenName(before_canteen_name, after_canteen_name);
-                    Intent intent = new Intent();
-                    intent.putExtra("after_canteen_name", after_canteen_name);
-                    setResult(RESULT_OK, intent);
-                    Toast.makeText(ModifyCanteenActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                    finish();
+                    int row = CanteenDbHelper.getInstance(ModifyCanteenActivity.this).updateCanteen(before_canteen_name, after_canteen_name);
+                    if (row == 0) {
+                        Toast.makeText(ModifyCanteenActivity.this, "修改食堂名失败", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        WindowDbHelper.getInstance(ModifyCanteenActivity.this).updateWindowCanteenName(before_canteen_name, after_canteen_name);
+                        Intent intent = new Intent();
+                        intent.putExtra("after_canteen_name", after_canteen_name);
+                        setResult(RESULT_OK, intent);
+                        Toast.makeText(ModifyCanteenActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             }
         });
