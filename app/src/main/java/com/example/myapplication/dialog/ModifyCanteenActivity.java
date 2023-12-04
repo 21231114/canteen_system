@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 
 public class ModifyCanteenActivity extends AppCompatActivity {
@@ -38,6 +39,7 @@ public class ModifyCanteenActivity extends AppCompatActivity {
                         finish();
                     } else {
                         WindowDbHelper.getInstance(ModifyCanteenActivity.this).updateWindowCanteenName(before_canteen_name, after_canteen_name);
+                        FoodDbHelper.getInstance(ModifyCanteenActivity.this).updateFoodCanteenName(before_canteen_name, after_canteen_name);
                         Intent intent = new Intent();
                         intent.putExtra("after_canteen_name", after_canteen_name);
                         setResult(RESULT_OK, intent);

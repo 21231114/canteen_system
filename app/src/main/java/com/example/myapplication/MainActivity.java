@@ -142,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 if (resultCode == RESULT_OK) {
                     //1是修改食堂名活动返回
-                    String after_canteen_name = data.getStringExtra("after_canteen_name");
+                    now_show_canteen_name = data.getStringExtra("after_canteen_name");
                     if (recipesFragment != null) {
-                        recipesFragment.loadData();
-                        recipesFragment.loadRightData(after_canteen_name);
+                        //recipesFragment.loadData();
+                        //recipesFragment.loadRightData(after_canteen_name);
                     }
                 }
                 break;
@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     //2是添加窗口活动返回
                     now_show_canteen_name = data.getStringExtra("canteen_name");
-                    Toast.makeText(this, now_show_canteen_name + "a", Toast.LENGTH_SHORT).show();
                     if (recipesFragment != null) {
                         recipesFragment.loadData();
                         recipesFragment.loadRightData(now_show_canteen_name);

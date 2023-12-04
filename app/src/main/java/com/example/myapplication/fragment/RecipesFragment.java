@@ -1,5 +1,6 @@
 package com.example.myapplication.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,11 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.myapplication.LoginActivity;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ShowFoodActivity;
 import com.example.myapplication.adapter.LeftListAdapter;
 import com.example.myapplication.adapter.RightListAdapter;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
+import com.example.myapplication.dialog.AddCanteenActivity;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.WindowInfo;
 
@@ -31,6 +36,23 @@ public class RecipesFragment extends Fragment {
     private RightListAdapter myRightListAdapter;//初始化控件时，也需要该适配器
     private List<String> leftDataList = new ArrayList<>();//食堂名数据
     private List<String> rightDataList = new ArrayList<>();//窗口名数据
+    private String now_canteen_name, now_window_name;
+
+    public String getNow_canteen_name() {
+        return now_canteen_name;
+    }
+
+    public void setNow_canteen_name(String now_canteen_name) {
+        this.now_canteen_name = now_canteen_name;
+    }
+
+    public String getNow_window_name() {
+        return now_window_name;
+    }
+
+    public void setNow_window_name(String now_window_name) {
+        this.now_window_name = now_window_name;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,10 +92,9 @@ public class RecipesFragment extends Fragment {
         String FirstDiningName = "";
         if (itemView != null) {
             FirstDiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
-            FirstDiningName="1";
         }
         loadRightData(FirstDiningName);
-
+        now_canteen_name = FirstDiningName;
         //recycleView的点击事件
         myListAdapter.setMyLeftListOnClickItemListener(new LeftListAdapter.LeftListOnClickItemListener() {
             @Override
@@ -86,6 +107,24 @@ public class RecipesFragment extends Fragment {
                     DiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
                 }
                 loadRightData(DiningName);
+            }
+        });
+        //TODO :右面的显示菜单点击事件
+        myRightListAdapter.setMyRightListOnClickItemListener(new RightListAdapter.RightListOnClickItemListener() {
+            @Override
+            public void onItemMenuClick(int position) {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) rightRecyclerView.getLayoutManager();
+                View itemView = layoutManager.getChildAt(position);
+                String windowName = "";//获取当前要查看的是哪个窗口
+                if (itemView != null) {
+                    windowName = ((TextView) (itemView.findViewById(R.id.windowName))).getText().toString();
+                }
+                Intent intent = new Intent(getActivity(), ShowFoodActivity.class);
+                intent.putExtra("window_name", windowName);
+                intent.putExtra("canteen_name", now_canteen_name);
+                //传递要查看的窗口信息
+                startActivity(intent);
+
             }
         });
 
@@ -121,8 +160,9 @@ public class RecipesFragment extends Fragment {
 
     //右侧数据是根据所选中的食堂定的
     public void loadRightData(String name) {
+        now_canteen_name = name;//每当调用这个方法就说明，now_食堂名会发生改变
         rightDataList.clear();
-        if(name==null){
+        if (name == null) {
             //如果是空字符串
             myRightListAdapter.setDataList(rightDataList);
             return;
@@ -130,7 +170,7 @@ public class RecipesFragment extends Fragment {
         List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(getActivity()).queryWindowListData(name);
 
         for (int i = 0; i < windowInfoList.size(); i++) {
-           rightDataList.add(windowInfoList.get(i).getWindow_name());
+            rightDataList.add(windowInfoList.get(i).getWindow_name());
         }
         myRightListAdapter.setDataList(rightDataList);
     }
