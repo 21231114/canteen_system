@@ -34,11 +34,11 @@
                 tools:layout_editor_absoluteX="50dp">
 
                 <Button
-                    android:id="@+id/modify_canteen"
+                    android:id="@+id/add_food"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="修改食堂名" />
+                    android:text="添加食物" />
 
                 <Button
                     android:id="@+id/add_window"

@@ -42,6 +42,10 @@
             android:name=".dialog.AddWindowActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".dialog.AddFoodActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>
