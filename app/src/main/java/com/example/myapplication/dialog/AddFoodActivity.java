@@ -30,14 +30,18 @@ public class AddFoodActivity extends AppCompatActivity {
                 String food_name = et_food_name.getText().toString();
                 FoodDbHelper myFoodDbHelper = FoodDbHelper.getInstance(AddFoodActivity.this);
                 //加入前需要判断该食物名是否在窗口里冲突
-                int row = myFoodDbHelper.addFood(food_name, canteen_name, window_name);
-                if(row>0){
-                    Toast.makeText(AddFoodActivity.this, "添加食物成功", Toast.LENGTH_SHORT).show();
+                if (myFoodDbHelper.isHasFood(canteen_name, window_name, food_name)) {
+                    Toast.makeText(AddFoodActivity.this, "食物名重复，添加失败", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    int row = myFoodDbHelper.addFood(food_name, canteen_name, window_name);
+                    if (row > 0) {
+                        Toast.makeText(AddFoodActivity.this, "添加食物成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AddFoodActivity.this, "添加食物失败", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
                 }
-                else{
-                    Toast.makeText(AddFoodActivity.this, "添加食物失败", Toast.LENGTH_SHORT).show();
-                }
-                finish();
             }
         });
     }

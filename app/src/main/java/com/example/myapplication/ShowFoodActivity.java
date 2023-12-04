@@ -12,6 +12,7 @@ import com.example.myapplication.adapter.FoodListAdapter;
 import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.dialog.AddFoodActivity;
+import com.example.myapplication.dialog.ModifyFoodActivity;
 import com.example.myapplication.entity.FoodInfo;
 import com.example.myapplication.entity.WindowInfo;
 
@@ -44,6 +45,15 @@ public class ShowFoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShowFoodActivity.this, AddFoodActivity.class);
+                intent.putExtra("canteen_name", my_canteen_name);
+                intent.putExtra("window_name", my_window_name);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.modify_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShowFoodActivity.this, ModifyFoodActivity.class);
                 intent.putExtra("canteen_name", my_canteen_name);
                 intent.putExtra("window_name", my_window_name);
                 startActivity(intent);

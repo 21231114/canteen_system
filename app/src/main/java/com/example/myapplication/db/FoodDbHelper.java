@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FoodInfo;
 
 
@@ -94,6 +95,21 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         return update;
     }
 
+    public boolean isHasFood(String canteen_name, String window_name, String food_name) {
+        SQLiteDatabase db = getReadableDatabase();
+        FoodInfo foodInfo = null;
+        String sql = "select food_id,food_name,canteen_name  from food_table where canteen_name=? and window_name=? and food_name=?";
+        String[] selectionArgs = {canteen_name, window_name, food_name};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        boolean ans = false;
+        if (cursor.moveToNext()) {
+            ans = true;
+        }
+        cursor.close();
+        db.close();
+        return ans;
+    }
+
     //更新食物对应的食堂的名字
     public int updateFoodCanteenName(String before_canteen_name, String after_canteen_name) {
         //获取SQLiteDatabase实例
@@ -115,7 +131,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         List<FoodInfo> list = new ArrayList<>();
         String sql = "select food_id,food_name,canteen_name,window_name from food_table where canteen_name=? and window_name=?";
-        String[] selectionArgs = {canteen_name,window_name};//查询条件
+        String[] selectionArgs = {canteen_name, window_name};//查询条件
         Cursor cursor = db.rawQuery(sql, selectionArgs);
         while (cursor.moveToNext()) {
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));

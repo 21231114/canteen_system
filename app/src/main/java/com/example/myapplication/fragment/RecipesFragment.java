@@ -109,7 +109,7 @@ public class RecipesFragment extends Fragment {
         刚刚setAdapter就getChild,UI还没有搞完
          */
         Handler handler = new Handler();
-        handler.postDelayed(runnable,300);
+        handler.postDelayed(runnable,1000);
 //        LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
 //        View itemView = layoutManager.getChildAt(0);
 //        String FirstDiningName = "";
