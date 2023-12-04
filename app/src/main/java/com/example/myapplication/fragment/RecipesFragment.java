@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.MainActivity;
@@ -66,7 +68,23 @@ public class RecipesFragment extends Fragment {
         rightRecyclerView = rootView.findViewById(R.id.rightRecyclerView);
         return rootView;
     }
-
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            // 在这里编写要执行的任务
+            LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
+            View itemView = layoutManager.getChildAt(0);
+            String FirstDiningName = "";
+            if (itemView != null) {
+                FirstDiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
+            }
+            else{
+                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+            }
+            loadRightData(FirstDiningName);
+            now_canteen_name = FirstDiningName;
+        }
+    };
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -87,14 +105,22 @@ public class RecipesFragment extends Fragment {
         myRightListAdapter = new RightListAdapter(rightDataList);
         rightRecyclerView.setAdapter(myRightListAdapter);
         //默认加载的数据是第一条
-        LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
-        View itemView = layoutManager.getChildAt(0);
-        String FirstDiningName = "";
-        if (itemView != null) {
-            FirstDiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
-        }
-        loadRightData(FirstDiningName);
-        now_canteen_name = FirstDiningName;
+        /*
+        刚刚setAdapter就getChild,UI还没有搞完
+         */
+        Handler handler = new Handler();
+        handler.postDelayed(runnable,300);
+//        LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
+//        View itemView = layoutManager.getChildAt(0);
+//        String FirstDiningName = "";
+//        if (itemView != null) {
+//            FirstDiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
+//        }
+//        else{
+//            Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+//        }
+//        loadRightData(FirstDiningName);
+//        now_canteen_name = FirstDiningName;
         //recycleView的点击事件
         myListAdapter.setMyLeftListOnClickItemListener(new LeftListAdapter.LeftListOnClickItemListener() {
             @Override
@@ -160,6 +186,7 @@ public class RecipesFragment extends Fragment {
 
     //右侧数据是根据所选中的食堂定的
     public void loadRightData(String name) {
+
         now_canteen_name = name;//每当调用这个方法就说明，now_食堂名会发生改变
         rightDataList.clear();
         if (name == null) {
