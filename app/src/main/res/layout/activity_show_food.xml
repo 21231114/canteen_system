@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragment.RecipesFragment">
+    tools:context=".ShowFoodActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 app:layout_constraintTop_toBottomOf="@id/linear"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="-4dp"
-                tools:listitem="@layout/recipes_right_list_item" />
+                tools:listitem="@layout/food_list_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
