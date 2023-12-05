@@ -8,10 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.dialog.AddWindowActivity;
+import com.example.myapplication.dialog.DeleteCanteenActivity;
 import com.example.myapplication.dialog.ModifyCanteenActivity;
 import com.example.myapplication.fragment.RecipesFragment;
 import com.example.myapplication.fragment.UsersFragment;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private RecipesFragment recipesFragment;
     private UsersFragment usersFragment;
     private BottomNavigationView myBottomNavigationView;
+    private boolean isEqual = false;
     //private String now_show_canteen_name = "";
 
     @Override
@@ -92,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void DeleteOnClick() {
-
+                        Intent intent = new Intent(MainActivity.this, DeleteCanteenActivity.class);
+                        startActivityForResult(intent, 4);//1是请求码，用于确定是要启动哪个活动
                     }
 
                     @Override
@@ -131,10 +136,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         if (recipesFragment != null) {
             recipesFragment.loadData();
-            if (recipesFragment.getNow_canteen_name() != null) {
-               // Toast.makeText(this, recipesFragment.getNow_canteen_name(), Toast.LENGTH_SHORT).show();
-                recipesFragment.loadRightData(recipesFragment.getNow_canteen_name());
+            if (isEqual) {
+                recipesFragment.getMyListAdapter().setCurrentIndex(0);//当前索引食堂被删除，跳回第一个
+                View itemView = recipesFragment.getRecyclerViewItem(recipesFragment.getLeftRecyclerView(), 0);
+                if(itemView!=null) {
+                    recipesFragment.setNow_canteen_name(((TextView) (itemView.findViewById(R.id.diningName))).getText().toString());
+                }
+                else{
+                    recipesFragment.setNow_canteen_name("");
+                }
+                isEqual = false;
             }
+//            if (recipesFragment.getNow_canteen_name() != null) {
+                // Toast.makeText(this, recipesFragment.getNow_canteen_name(), Toast.LENGTH_SHORT).show();
+                recipesFragment.loadRightData(recipesFragment.getNow_canteen_name());
+            //}
         }
         super.onResume();
     }
@@ -172,6 +188,13 @@ public class MainActivity extends AppCompatActivity {
                     if (Objects.equals(recipesFragment.getNow_canteen_name(), "")) {
                         recipesFragment.setNow_canteen_name(canteen_name);
                     }
+                }
+                break;
+            case 4:
+                if (resultCode == RESULT_OK) {
+                    //4是删除食堂活动返回
+                    String canteen_name = data.getStringExtra("canteen_name");//获取删除了那个食堂
+                    isEqual = Objects.equals(recipesFragment.getNow_canteen_name(), canteen_name);
                 }
                 break;
             default:

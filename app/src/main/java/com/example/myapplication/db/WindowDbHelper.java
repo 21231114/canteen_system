@@ -111,7 +111,6 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-
     //根据食堂名查询对应的窗口列表
     @SuppressLint("Range")
     public List<WindowInfo> queryWindowListData(String diningName) {
@@ -130,6 +129,27 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return list;
+    }
+    //删除操作
+   //1.删除窗口
+    public int deleteWindow(String canteen_name, String window_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("window_table", " canteen_name=? and window_name=?", new String[]{canteen_name, window_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    //2.删除食堂
+    public int deleteCanteen(String canteen_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("window_table", " canteen_name=?", new String[]{canteen_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
     }
 }
 

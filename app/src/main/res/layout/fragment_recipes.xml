@@ -78,6 +78,12 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:text="添加窗口" />
+                <Button
+                    android:id="@+id/delete_canteen"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="删除食堂" />
 
             </LinearLayout>
 

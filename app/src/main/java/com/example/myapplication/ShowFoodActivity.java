@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.adapter.FoodListAdapter;
@@ -59,6 +60,21 @@ public class ShowFoodActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        myFoodListAdapter.setMyFoodListOnClickItemListener(new FoodListAdapter.FoodListOnClickItemListener() {
+            @Override
+            public void onItemDeleteFoodClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String food_name = ((TextView) itemView.findViewById(R.id.food_name)).getText().toString();
+                int row = FoodDbHelper.getInstance(ShowFoodActivity.this).deleteFood(my_canteen_name, my_window_name, food_name);
+                if(row>0){
+                    Toast.makeText(ShowFoodActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(ShowFoodActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                }
+                loadData();//重新加载食物列表
+            }
+        });
     }
 
     public void loadData() {
@@ -74,5 +90,18 @@ public class ShowFoodActivity extends AppCompatActivity {
         //从其他活动返回需要重新加载数据，因为可能数据库发生了变化
         loadData();
         super.onResume();
+    }
+
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
     }
 }

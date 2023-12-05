@@ -95,6 +95,14 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.MyHo
                 }
             }
         });
+        holder.itemView.findViewById(R.id.delete_window).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (myRightListOnClickItemListener != null) {
+                    myRightListOnClickItemListener.onItemDeleteWindowClick(position);//回调
+                }
+            }
+        });
     }
 
     @Override

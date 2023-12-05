@@ -22,13 +22,16 @@ import com.example.myapplication.ShowFoodActivity;
 import com.example.myapplication.adapter.LeftListAdapter;
 import com.example.myapplication.adapter.RightListAdapter;
 import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.dialog.AddCanteenActivity;
+import com.example.myapplication.dialog.ModifyWindowActivity;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.WindowInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipesFragment extends Fragment {
     private View rootView; //rootView就是当前recipe的界面
@@ -38,7 +41,7 @@ public class RecipesFragment extends Fragment {
     private RightListAdapter myRightListAdapter;//初始化控件时，也需要该适配器
     private List<String> leftDataList = new ArrayList<>();//食堂名数据
     private List<String> rightDataList = new ArrayList<>();//窗口名数据
-    private String now_canteen_name, now_window_name;
+    private String now_canteen_name="", now_window_name="";
 
     public String getNow_canteen_name() {
         return now_canteen_name;
@@ -46,6 +49,10 @@ public class RecipesFragment extends Fragment {
 
     public void setNow_canteen_name(String now_canteen_name) {
         this.now_canteen_name = now_canteen_name;
+    }
+
+    public LeftListAdapter getMyListAdapter() {
+        return myListAdapter;
     }
 
     public String getNow_window_name() {
@@ -85,6 +92,10 @@ public class RecipesFragment extends Fragment {
             now_canteen_name = FirstDiningName;
         }
     };
+
+    public RecyclerView getLeftRecyclerView() {
+        return leftRecyclerView;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -142,7 +153,7 @@ public class RecipesFragment extends Fragment {
         myRightListAdapter.setMyRightListOnClickItemListener(new RightListAdapter.RightListOnClickItemListener() {
             @Override
             public void onItemMenuClick(int position) {
-                View itemView = getRecyclerViewItem(leftRecyclerView, position);
+                View itemView = getRecyclerViewItem(rightRecyclerView, position);
                 String windowName = "";//获取当前要查看的是哪个窗口
                 if (itemView != null) {
                     windowName = ((TextView) (itemView.findViewById(R.id.windowName))).getText().toString();
@@ -152,17 +163,33 @@ public class RecipesFragment extends Fragment {
                 intent.putExtra("canteen_name", now_canteen_name);
                 //传递要查看的窗口信息
                 startActivity(intent);
-
             }
 
             @Override
             public void onItemModifyWindowClick(int position) {
+                View itemView = getRecyclerViewItem(rightRecyclerView, position);
+                String windowName = "";//获取当前要修改的是哪个窗口
+                if (itemView != null) {
+                    windowName = ((TextView) (itemView.findViewById(R.id.windowName))).getText().toString();
+                }
 
+                Intent intent = new Intent(getActivity(), ModifyWindowActivity.class);
+                intent.putExtra("window_name", windowName);
+                intent.putExtra("canteen_name", now_canteen_name);
+                //传递要查看的窗口信息
+                startActivity(intent);
             }
 
             @Override
             public void onItemDeleteWindowClick(int position) {
-
+                View itemView = getRecyclerViewItem(rightRecyclerView, position);
+                String windowName = "";//获取当前要删除的是哪个窗口
+                if (itemView != null) {
+                    windowName = ((TextView) (itemView.findViewById(R.id.windowName))).getText().toString();
+                }
+                WindowDbHelper.getInstance(getActivity()).deleteWindow(now_canteen_name, windowName);
+                FoodDbHelper.getInstance(getActivity()).deleteWindow(now_canteen_name, windowName);//删除对应的所有食物
+                loadRightData(now_canteen_name);
             }
         });
 
@@ -194,6 +221,15 @@ public class RecipesFragment extends Fragment {
                 }
             }
         });
+        //删除食堂操作
+        rootView.findViewById(R.id.delete_canteen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (myAddCanteenOnClickItemListener != null) {
+                    myAddCanteenOnClickItemListener.DeleteOnClick();
+                }
+            }
+        });
     }
 
     //右侧数据是根据所选中的食堂定的
@@ -201,7 +237,7 @@ public class RecipesFragment extends Fragment {
 
         now_canteen_name = name;//每当调用这个方法就说明，now_食堂名会发生改变
         rightDataList.clear();
-        if (name == null) {
+        if (Objects.equals(name, "")) {
             //如果是空字符串
             myRightListAdapter.setDataList(rightDataList);
             return;

@@ -134,6 +134,14 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
-
+    public int deleteCanteen(String canteen_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("canteen_table", " canteen_name=?", new String[]{canteen_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
 }
 

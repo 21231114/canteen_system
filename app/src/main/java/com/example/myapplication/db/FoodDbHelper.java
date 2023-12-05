@@ -51,7 +51,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
 
 
     //实现注册
-    public int addFood(String food_name, String canteen_name, String window_name,int food_type) {
+    public int addFood(String food_name, String canteen_name, String window_name, int food_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -95,7 +95,8 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-//同一食堂，窗口不能含有相同的食物
+
+    //同一食堂，窗口不能含有相同的食物
     public boolean isHasFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
         FoodInfo foodInfo = null;
@@ -143,5 +144,37 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return list;
+    }
+    //各种删除操作
+
+    //1.删除食物时
+    public int deleteFood(String canteen_name, String window_name, String food_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("food_table", " canteen_name=? and window_name=? and food_name=?", new String[]{canteen_name, window_name, food_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    //2.删除窗口是，删除，对应的食物
+    public int deleteWindow(String canteen_name, String window_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("food_table", " canteen_name=? and window_name=?", new String[]{canteen_name, window_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    //3.删除食堂时删除对应的食物
+    public int deleteCanteen(String canteen_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("food_table", " canteen_name=?", new String[]{canteen_name});
+        // 关闭数据库连接
+        db.close();
+        return delete;
     }
 }

@@ -50,6 +50,14 @@
             android:name=".dialog.ModifyFoodActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".dialog.ModifyWindowActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".dialog.DeleteCanteenActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>
