@@ -96,6 +96,19 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         return update;
     }
 
+    public int updateFoodType(String canteen_name, String window_name, String food_name,int food_type) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("food_type", food_type);
+        // 执行SQL
+        int update = db.update("food_table", values, " canteen_name=? and window_name=? and food_name=?", new String[]{canteen_name, window_name, food_name});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
+
     //同一食堂，窗口不能含有相同的食物
     public boolean isHasFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
@@ -126,6 +139,19 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         return update;
     }
 
+    //更新食物类型
+//    public int updateFoodCanteenName(String before_canteen_name, String after_canteen_name) {
+//        //获取SQLiteDatabase实例
+//        SQLiteDatabase db = getWritableDatabase();
+//        // 填充占位符
+//        ContentValues values = new ContentValues();
+//        values.put("canteen_name", after_canteen_name);
+//        // 执行SQL
+//        int update = db.update("food_table", values, "canteen_name=?", new String[]{before_canteen_name});
+//        // 关闭数据库连接
+//        db.close();
+//        return update;
+//    }
     //需要根据食堂名称和窗口名称查询食物列表
     @SuppressLint("Range")
     public List<FoodInfo> queryFoodListData(String canteen_name, String window_name) {
@@ -157,6 +183,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
+
     //2.删除窗口是，删除，对应的食物
     public int deleteWindow(String canteen_name, String window_name) {
         //获取SQLiteDatabase实例
@@ -167,6 +194,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
+
     //3.删除食堂时删除对应的食物
     public int deleteCanteen(String canteen_name) {
         //获取SQLiteDatabase实例

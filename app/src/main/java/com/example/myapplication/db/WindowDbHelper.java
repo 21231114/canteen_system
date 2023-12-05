@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.myapplication.entity.UserInfo;
 import com.example.myapplication.entity.WindowInfo;
 
 

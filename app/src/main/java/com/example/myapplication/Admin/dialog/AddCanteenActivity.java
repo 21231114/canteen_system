@@ -1,4 +1,4 @@
-package com.example.myapplication.dialog;
+package com.example.myapplication.Admin.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 

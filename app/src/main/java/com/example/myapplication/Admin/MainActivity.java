@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Admin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,15 +10,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.myapplication.db.WindowDbHelper;
-import com.example.myapplication.dialog.AddWindowActivity;
-import com.example.myapplication.dialog.DeleteCanteenActivity;
-import com.example.myapplication.dialog.ModifyCanteenActivity;
-import com.example.myapplication.fragment.RecipesFragment;
-import com.example.myapplication.fragment.UsersFragment;
-import com.example.myapplication.dialog.AddCanteenActivity;
+import com.example.myapplication.Admin.dialog.AddWindowActivity;
+import com.example.myapplication.Admin.dialog.DeleteCanteenActivity;
+import com.example.myapplication.Admin.dialog.ModifyCanteenActivity;
+import com.example.myapplication.Admin.fragment.RecipesFragment;
+import com.example.myapplication.Admin.fragment.UsersFragment;
+import com.example.myapplication.Admin.dialog.AddCanteenActivity;
+import com.example.myapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Objects;

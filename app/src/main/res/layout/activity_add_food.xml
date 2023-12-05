@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dialog.AddFoodActivity">
+    tools:context=".Admin.dialog.AddFoodActivity">
 
 
     <androidx.appcompat.widget.LinearLayoutCompat

@@ -1,4 +1,4 @@
-package com.example.myapplication.adapter;
+package com.example.myapplication.Admin.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.entity.FoodInfo;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
 
     public interface FoodListOnClickItemListener {
         void onItemDeleteFoodClick(int position);//接收点某个具体项菜单的操作函数
+
+        void onItemMOdifyFoodTypeClick(int position);//接收点某个具体项菜单的操作函数
     }
 
     public void setMyFoodListOnClickItemListener(FoodListOnClickItemListener myFoodListOnClickItemListener) {
@@ -58,6 +59,13 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
             public void onClick(View view) {
                 //这个按钮是删除菜品
                 myFoodListOnClickItemListener.onItemDeleteFoodClick(position);
+            }
+        });
+        holder.itemView.findViewById(R.id.modify_food_type).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //这个按钮是删除菜品
+                myFoodListOnClickItemListener.onItemMOdifyFoodTypeClick(position);
             }
         });
     }

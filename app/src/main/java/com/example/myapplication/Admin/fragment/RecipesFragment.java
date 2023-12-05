@@ -1,4 +1,4 @@
-package com.example.myapplication.fragment;
+package com.example.myapplication.Admin.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,19 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.myapplication.LoginActivity;
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.ShowFoodActivity;
-import com.example.myapplication.adapter.LeftListAdapter;
-import com.example.myapplication.adapter.RightListAdapter;
+import com.example.myapplication.Admin.ShowFoodActivity;
+import com.example.myapplication.Admin.adapter.LeftListAdapter;
+import com.example.myapplication.Admin.adapter.RightListAdapter;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
-import com.example.myapplication.dialog.AddCanteenActivity;
-import com.example.myapplication.dialog.ModifyWindowActivity;
+import com.example.myapplication.Admin.dialog.ModifyWindowActivity;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.WindowInfo;
 

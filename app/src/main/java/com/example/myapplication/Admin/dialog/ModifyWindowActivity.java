@@ -1,4 +1,4 @@
-package com.example.myapplication.dialog;
+package com.example.myapplication.Admin.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 
 public class ModifyWindowActivity extends AppCompatActivity {
@@ -30,10 +31,10 @@ public class ModifyWindowActivity extends AppCompatActivity {
                     Toast.makeText(ModifyWindowActivity.this, "此食堂该窗口名称已经存在", Toast.LENGTH_SHORT).show();
                 } else {
                     int row = WindowDbHelper.getInstance(ModifyWindowActivity.this).updateWindowName(canteen_name, before_window_name, after_window_name);
-                    if(row>0){
+                    FoodDbHelper.getInstance(ModifyWindowActivity.this).updateFoodWindowName(canteen_name, before_window_name, after_window_name);
+                    if (row > 0) {
                         Toast.makeText(ModifyWindowActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(ModifyWindowActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                     }
                 }

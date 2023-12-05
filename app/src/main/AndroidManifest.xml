@@ -13,13 +13,13 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ShowFoodActivity"
+            android:name=".Admin.ShowFoodActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Admin.MainActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -31,31 +31,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dialog.AddCanteenActivity"
+            android:name=".Admin.dialog.AddCanteenActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.ModifyCanteenActivity"
+            android:name=".Admin.dialog.ModifyCanteenActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.AddWindowActivity"
+            android:name=".Admin.dialog.AddWindowActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.AddFoodActivity"
+            android:name=".Admin.dialog.AddFoodActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.ModifyFoodActivity"
+            android:name=".Admin.dialog.ModifyFoodActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.ModifyWindowActivity"
+            android:name=".Admin.dialog.ModifyWindowActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
         <activity
-            android:name=".dialog.DeleteCanteenActivity"
+            android:name=".Admin.dialog.DeleteCanteenActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".Admin.dialog.ModifyFoodTypeActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
     </application>
