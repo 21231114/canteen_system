@@ -5,15 +5,26 @@
 
     <TextView
         android:id="@+id/windowName"
-        android:layout_width="260dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:gravity="center_vertical"
+        android:text="xxxxxxxx" />
+    <Button
+        android:id="@+id/modify_window"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:paddingLeft="10dp"
-        android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
-
+        android:text="修改窗口" />
+    <Button
+        android:id="@+id/delete_window"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:paddingLeft="10dp"
+        android:text="删除窗口" />
     <Button
         android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="查看菜单" />
+        android:paddingLeft="10dp"
+        android:text="菜单" />
 </androidx.appcompat.widget.LinearLayoutCompat>

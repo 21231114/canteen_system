@@ -18,11 +18,13 @@ import com.example.myapplication.fragment.UsersFragment;
 import com.example.myapplication.dialog.AddCanteenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private RecipesFragment recipesFragment;
     private UsersFragment usersFragment;
     private BottomNavigationView myBottomNavigationView;
-    private String now_show_canteen_name = "";
+    //private String now_show_canteen_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         //intent类型传递对象时,一定要实现一个Serializable,将对象转换为字节流
                         //踩过的坑，fragment不能这么传，因为不能序列化
 //                        intent.putExtra("recipeFragmentId", );
-                        startActivity(intent);
+                        startActivityForResult(intent, 3);//1是请求码，用于确定是要启动哪个活动
                         //  recipesFragment.loadData();
                     }
 
@@ -129,8 +131,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         if (recipesFragment != null) {
             recipesFragment.loadData();
-            if (now_show_canteen_name != null) {
-                recipesFragment.loadRightData(now_show_canteen_name);
+            if (recipesFragment.getNow_canteen_name() != null) {
+               // Toast.makeText(this, recipesFragment.getNow_canteen_name(), Toast.LENGTH_SHORT).show();
+                recipesFragment.loadRightData(recipesFragment.getNow_canteen_name());
             }
         }
         super.onResume();
@@ -142,7 +145,10 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 if (resultCode == RESULT_OK) {
                     //1是修改食堂名活动返回
-                    now_show_canteen_name = data.getStringExtra("after_canteen_name");
+                    //Todo:
+                    if (Objects.equals(recipesFragment.getNow_canteen_name(), data.getStringExtra("before_canteen_name")))
+                        recipesFragment.setNow_canteen_name(data.getStringExtra("after_canteen_name"));
+                    // now_show_canteen_name = data.getStringExtra("after_canteen_name");
                     if (recipesFragment != null) {
                         //recipesFragment.loadData();
                         //recipesFragment.loadRightData(after_canteen_name);
@@ -152,10 +158,19 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
                     //2是添加窗口活动返回
-                    now_show_canteen_name = data.getStringExtra("canteen_name");
+                    //now_show_canteen_name = data.getStringExtra("canteen_name");
                     if (recipesFragment != null) {
-                        recipesFragment.loadData();
-                        recipesFragment.loadRightData(now_show_canteen_name);
+                        // recipesFragment.loadData();
+                        // recipesFragment.loadRightData(recipesFragment.getNow_canteen_name());
+                    }
+                }
+                break;
+            case 3:
+                if (resultCode == RESULT_OK) {
+                    //3是添加食堂活动返回
+                    String canteen_name = data.getStringExtra("canteen_name");
+                    if (Objects.equals(recipesFragment.getNow_canteen_name(), "")) {
+                        recipesFragment.setNow_canteen_name(canteen_name);
                     }
                 }
                 break;

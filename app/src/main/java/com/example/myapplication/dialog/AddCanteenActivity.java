@@ -2,6 +2,7 @@ package com.example.myapplication.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,9 +28,12 @@ public class AddCanteenActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String canteen_name = et_canteen_name.getText().toString();
                 int row = CanteenDbHelper.getInstance(AddCanteenActivity.this).addCanteen(canteen_name);
-                if (row > 0)
+                if (row > 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra("canteen_name", canteen_name);//
+                    setResult(RESULT_OK, intent);
                     Toast.makeText(AddCanteenActivity.this, "成功写入数据库", Toast.LENGTH_SHORT).show();
-                else {
+                } else {
                     Toast.makeText(AddCanteenActivity.this, "写入数据库失败", Toast.LENGTH_SHORT).show();
                 }
                 finish();

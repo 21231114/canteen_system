@@ -33,9 +33,16 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         String foodName = dataList.get(position).getFood_name();
-        String food_type = Integer.toString(dataList.get(position).getFood_type());
+        int food_type = dataList.get(position).getFood_type();
         holder.food_name.setText(foodName);
-        holder.food_type.setText(food_type);
+        if (food_type== 0)
+            holder.food_type.setText("饮品");
+        else if(food_type==1){
+            holder.food_type.setText("早饭");
+        }
+        else{
+            holder.food_type.setText("正餐");
+        }
     }
 
     @Override

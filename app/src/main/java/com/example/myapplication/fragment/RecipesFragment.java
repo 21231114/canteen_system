@@ -68,6 +68,7 @@ public class RecipesFragment extends Fragment {
         rightRecyclerView = rootView.findViewById(R.id.rightRecyclerView);
         return rootView;
     }
+
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -77,14 +78,14 @@ public class RecipesFragment extends Fragment {
             String FirstDiningName = "";
             if (itemView != null) {
                 FirstDiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
-            }
-            else{
-                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+            } else {
+//                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
             }
             loadRightData(FirstDiningName);
             now_canteen_name = FirstDiningName;
         }
     };
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -109,7 +110,7 @@ public class RecipesFragment extends Fragment {
         刚刚setAdapter就getChild,UI还没有搞完
          */
         Handler handler = new Handler();
-        handler.postDelayed(runnable,1000);
+        handler.postDelayed(runnable, 1000);
 //        LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
 //        View itemView = layoutManager.getChildAt(0);
 //        String FirstDiningName = "";
@@ -126,21 +127,22 @@ public class RecipesFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 myListAdapter.setCurrentIndex(position);//当发生点击事件时，需要更改页面
-                LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
-                View itemView = layoutManager.getChildAt(position);
+//                LinearLayoutManager layoutManager = (LinearLayoutManager) leftRecyclerView.getLayoutManager();
+//                View itemView = layoutManager.getChildAt(position);
+                View itemView = getRecyclerViewItem(leftRecyclerView, position);
                 String DiningName = "";
                 if (itemView != null) {
                     DiningName = ((TextView) (itemView.findViewById(R.id.diningName))).getText().toString();
                 }
                 loadRightData(DiningName);
+                now_canteen_name = DiningName;
             }
         });
         //TODO :右面的显示菜单点击事件
         myRightListAdapter.setMyRightListOnClickItemListener(new RightListAdapter.RightListOnClickItemListener() {
             @Override
             public void onItemMenuClick(int position) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) rightRecyclerView.getLayoutManager();
-                View itemView = layoutManager.getChildAt(position);
+                View itemView = getRecyclerViewItem(leftRecyclerView, position);
                 String windowName = "";//获取当前要查看的是哪个窗口
                 if (itemView != null) {
                     windowName = ((TextView) (itemView.findViewById(R.id.windowName))).getText().toString();
@@ -152,6 +154,16 @@ public class RecipesFragment extends Fragment {
                 startActivity(intent);
 
             }
+
+            @Override
+            public void onItemModifyWindowClick(int position) {
+
+            }
+
+            @Override
+            public void onItemDeleteWindowClick(int position) {
+
+            }
         });
 
         //食堂添加按钮点击
@@ -160,7 +172,7 @@ public class RecipesFragment extends Fragment {
             public void onClick(View view) {
                 if (myAddCanteenOnClickItemListener != null) {
                     myAddCanteenOnClickItemListener.AddCanteenOnClick();
-//                    loadData();
+
                 }
             }
         });
@@ -229,5 +241,17 @@ public class RecipesFragment extends Fragment {
 
     private AddCanteenOnClickItemListener myAddCanteenOnClickItemListener;
 
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
+    }
 
 }

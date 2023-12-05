@@ -34,6 +34,8 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.MyHo
     private  int currentIndex = 0;//哪一个项被选中了，需要由recipesFragment告诉adapter
     public interface RightListOnClickItemListener {
         void onItemMenuClick(int position);//接收点某个具体项菜单的操作函数
+        void onItemModifyWindowClick(int position);//接收点某个具体项修改窗口的操作函数
+        void onItemDeleteWindowClick(int position);//接收点某个具体项删除窗口的操作函数
     }
 
     public void setDataList(List<String> dataList) {
@@ -48,6 +50,8 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.MyHo
     static class MyHolder extends RecyclerView.ViewHolder {
         TextView window_name;
         Button menu;
+        Button modify_window;
+        Button delete_window;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +59,8 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.MyHo
             //初始化控件
             window_name = itemView.findViewById(R.id.windowName);
             menu = itemView.findViewById(R.id.menu);
+            modify_window =itemView.findViewById(R.id.modify_window);
+            delete_window =itemView.findViewById(R.id.delete_window);
         }
     }
 
@@ -81,10 +87,14 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.MyHo
                 }
             }
         });
-//        if(currentIndex == position){
-//            holder.itemView.setBackgroundResource(R.drawable.type_selcetor_bg);
-//            //如果当前item被选中了,
-//        }
+        holder.itemView.findViewById(R.id.modify_window).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (myRightListOnClickItemListener != null) {
+                    myRightListOnClickItemListener.onItemModifyWindowClick(position);//回调
+                }
+            }
+        });
     }
 
     @Override

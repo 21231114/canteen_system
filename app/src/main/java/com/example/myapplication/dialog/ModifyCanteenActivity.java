@@ -42,6 +42,7 @@ public class ModifyCanteenActivity extends AppCompatActivity {
                         FoodDbHelper.getInstance(ModifyCanteenActivity.this).updateFoodCanteenName(before_canteen_name, after_canteen_name);
                         Intent intent = new Intent();
                         intent.putExtra("after_canteen_name", after_canteen_name);
+                        intent.putExtra("before_canteen_name", before_canteen_name);
                         setResult(RESULT_OK, intent);
                         Toast.makeText(ModifyCanteenActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                         finish();

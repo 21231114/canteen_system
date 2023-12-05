@@ -99,6 +99,19 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         return update;
     }
 
+    public int updateWindowName(String canteen_name, String before_window_name, String after_window_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("window_name", after_window_name);
+        // 执行SQL
+        int update = db.update("window_table", values, " canteen_name=? and window_name=?", new String[]{canteen_name, before_window_name});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
+
     //根据食堂名查询对应的窗口列表
     @SuppressLint("Range")
     public List<WindowInfo> queryWindowListData(String diningName) {
