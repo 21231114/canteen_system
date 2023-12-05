@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="主页" />
+    <item
+        android:id="@+id/favor"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="我的收藏" />
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/baseline_history_24"
+        android:title="历史记录" />
+    <item
+        android:id="@+id/user_center"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        android:title="个人中心" />
+</menu>

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.Admin.MainActivity;
+import com.example.myapplication.User.MainActivity2;
 import com.example.myapplication.db.UserDbHelper;
 import com.example.myapplication.entity.UserInfo;
 
@@ -46,12 +47,14 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (login != null && username.equals(login.getUsername()) && password.equals(login.getPassword())) {
                         if (login.getRegister_type() == 0) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                            startActivity(intent);
                             Toast.makeText(LoginActivity.this, "用户登录成功", Toast.LENGTH_SHORT).show();
                         } else {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
                             Toast.makeText(LoginActivity.this, "管理员登录成功", Toast.LENGTH_SHORT).show();
                         }
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
                         finish();//结束当前的活动
                     } else {
                         Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
