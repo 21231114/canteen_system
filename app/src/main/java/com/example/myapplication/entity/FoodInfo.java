@@ -3,10 +3,20 @@ package com.example.myapplication.entity;
 public class FoodInfo {
     private int food_id;
     private String food_name;
+    private int food_type;
 
-    public FoodInfo(int food_id, String food_name, String canteen_name, String window_name) {
+    public int getFood_type() {
+        return food_type;
+    }
+
+    public void setFood_type(int food_type) {
+        this.food_type = food_type;
+    }
+
+    public FoodInfo(int food_id, String food_name, int foodType, String canteen_name, String window_name) {
         this.food_id = food_id;
         this.food_name = food_name;
+        food_type = foodType;
         this.canteen_name = canteen_name;
         this.window_name = window_name;
     }

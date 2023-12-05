@@ -22,7 +22,7 @@ import java.util.List;
 public class ShowFoodActivity extends AppCompatActivity {
     private RecyclerView myRecycleView;//当前展示列表的控件
     private FoodListAdapter myFoodListAdapter;
-    private List<String> foodList = new ArrayList<>();
+    private List<FoodInfo> foodList = new ArrayList<>();
     private String my_canteen_name;
     private String my_window_name;
 
@@ -63,10 +63,8 @@ public class ShowFoodActivity extends AppCompatActivity {
 
     public void loadData() {
         foodList.clear();
-        List<FoodInfo> foodInfoList = FoodDbHelper.getInstance(ShowFoodActivity.this).queryFoodListData(my_canteen_name, my_window_name);
-        for (int i = 0; i < foodInfoList.size(); i++) {
-            foodList.add(foodInfoList.get(i).getFood_name());
-        }
+        foodList = FoodDbHelper.getInstance(ShowFoodActivity.this).queryFoodListData(my_canteen_name, my_window_name);
+
         //Toast.makeText(this, Integer.toString(foodList.size()), Toast.LENGTH_SHORT).show();
         myFoodListAdapter.setDataList(foodList);
     }

@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FoodInfo;
 
 
@@ -40,7 +39,8 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.execSQL("create table food_table(food_id integer primary key autoincrement, " +
                 "food_name text," +
                 "canteen_name text," +
-                "window_name text" +
+                "window_name text," +
+                "food_type integer" +//食物的类型，0--饮品,1--早饭 ,2正餐
                 ")");
     }
 
@@ -51,7 +51,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
 
 
     //实现注册
-    public int addFood(String food_name, String canteen_name, String window_name) {
+    public int addFood(String food_name, String canteen_name, String window_name,int food_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -59,7 +59,8 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         values.put("food_name", food_name);
         values.put("canteen_name", canteen_name);
         values.put(" window_name", window_name);
-        String nullColumnHack = "values(null,?,?,?)";
+        values.put(" food_type", food_type);
+        String nullColumnHack = "values(null,?,?,?,?)";
         //执行
         int insert = (int) db.insert("food_table", nullColumnHack, values);
         //插入成功，返回id,插入失败返回-1
@@ -94,7 +95,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-
+//同一食堂，窗口不能含有相同的食物
     public boolean isHasFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
         FoodInfo foodInfo = null;
@@ -130,13 +131,14 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getReadableDatabase();
         List<FoodInfo> list = new ArrayList<>();
-        String sql = "select food_id,food_name,canteen_name,window_name from food_table where canteen_name=? and window_name=?";
+        String sql = "select food_id,food_name,canteen_name,window_name,food_type from food_table where canteen_name=? and window_name=?";
         String[] selectionArgs = {canteen_name, window_name};//查询条件
         Cursor cursor = db.rawQuery(sql, selectionArgs);
         while (cursor.moveToNext()) {
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
+            int food_type = cursor.getInt(cursor.getColumnIndex("food_type"));
             String food_name = cursor.getString(cursor.getColumnIndex("food_name"));
-            list.add(new FoodInfo(food_id, food_name, canteen_name, window_name));
+            list.add(new FoodInfo(food_id, food_name, food_type, canteen_name, window_name));
         }
         cursor.close();
         db.close();
