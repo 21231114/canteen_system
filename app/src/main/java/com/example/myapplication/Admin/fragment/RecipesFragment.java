@@ -145,7 +145,6 @@ public class RecipesFragment extends Fragment {
                 now_canteen_name = DiningName;
             }
         });
-        //TODO :右面的显示菜单点击事件
         myRightListAdapter.setMyRightListOnClickItemListener(new RightListAdapter.RightListOnClickItemListener() {
             @Override
             public void onItemMenuClick(int position) {

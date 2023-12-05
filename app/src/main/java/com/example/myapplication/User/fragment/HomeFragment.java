@@ -1,5 +1,6 @@
 package com.example.myapplication.User.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -9,10 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.myapplication.Admin.ShowFoodActivity;
 import com.example.myapplication.Admin.adapter.LeftListAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
+import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FoodInfo;
@@ -39,9 +44,25 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         canteenListAdapter = new CanteenListAdapter(dataList);//适配器需要数据接口
         myRecycleView.setAdapter(canteenListAdapter);//一定一定一定记得将视图与适配器绑定
         loadData();
+
+        canteenListAdapter.setCanteenListOnClickItemListener(new CanteenListAdapter.CanteenListOnClickItemListener() {
+            @Override
+            public void onItemEnterCanteenClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String now_canteen_name = "";//获取当前要查看的是哪个食堂
+                if (itemView != null) {
+                    now_canteen_name = ((TextView) (itemView.findViewById(R.id.canteen_name))).getText().toString();
+                }
+                Intent intent = new Intent(getActivity(), ShowWindowsActivity.class);
+                intent.putExtra("canteen_name", now_canteen_name);
+                //传递要查看的窗口信息
+                startActivity(intent);
+            }
+        });
     }
 
     public void loadData() {
@@ -51,5 +72,18 @@ public class HomeFragment extends Fragment {
             dataList.add(canteenInfoList.get(i).getCanteen_name());
         }
         canteenListAdapter.setDataList(dataList);
+    }
+
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
     }
 }

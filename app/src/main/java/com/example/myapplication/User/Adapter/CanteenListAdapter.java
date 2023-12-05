@@ -54,7 +54,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         holder.itemView.findViewById(R.id.enter_canteen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                canteenListOnClickItemListener.onItemEnterCanteenClick(position);
+                if (canteenListOnClickItemListener != null)
+                    canteenListOnClickItemListener.onItemEnterCanteenClick(position);
             }
         });
     }
