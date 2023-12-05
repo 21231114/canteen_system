@@ -39,34 +39,46 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
         db.execSQL("create table canteen_table(canteen_id integer primary key autoincrement, " +
                 "canteen_name text unique" +       //食堂名,不能重复
                 ")");
+        //初始化数据
+        ContentValues values = new ContentValues();
+        values.put("canteen_name", "合一楼");
+        String nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
 
+        values = new ContentValues();
+        values.put("canteen_name", "学一食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
 
+        values = new ContentValues();
+        values.put("canteen_name", "学二食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
+
+        values = new ContentValues();
+        values.put("canteen_name", "学三食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
+
+        values = new ContentValues();
+        values.put("canteen_name", "学四食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
+
+        values = new ContentValues();
+        values.put("canteen_name", "学五食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
+
+        values = new ContentValues();
+        values.put("canteen_name", "学六食堂");
+        nullColumnHack = "values(null,?)";
+        db.insert("canteen_table", nullColumnHack, values);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-    }
-
-    //实现登录
-    @SuppressLint("Range")//减少警告
-    public UserInfo login(String username) {
-        //获取SQLiteDatabase实例
-        SQLiteDatabase db = getReadableDatabase();
-        UserInfo userInfo = null;
-        String sql = "select canteen_id,canteen_name,password,register_type  from user_table where username=?";
-        String[] selectionArgs = {username};//查询条件
-        Cursor cursor = db.rawQuery(sql, selectionArgs);
-        if (cursor.moveToNext()) {
-            int user_id = cursor.getInt(cursor.getColumnIndex("user_id"));
-            String name = cursor.getString(cursor.getColumnIndex("username"));
-            String password = cursor.getString(cursor.getColumnIndex("password"));
-            int register_type = cursor.getInt(cursor.getColumnIndex("register_type"));
-            userInfo = new UserInfo(user_id, name, password, register_type);
-        }
-        cursor.close();
-        db.close();
-        return userInfo;
     }
 
     //实现注册
@@ -84,7 +96,6 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
         return insert;
     }
 
-    //TODO 在这里根据自己的业务需求，编写增删改查的方法，如下所示
     public int updateCanteen(String before_canteen_name, String canteen_name) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();

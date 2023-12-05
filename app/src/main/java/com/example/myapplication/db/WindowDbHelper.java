@@ -40,7 +40,97 @@ public class WindowDbHelper extends SQLiteOpenHelper {
                 "window_name text ," +       //
                 "canteen_name text" + //所属的食堂
                 ")");
+        //init
+        //合一楼
+        ContentValues values = new ContentValues();
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "航味");
+        String nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
 
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "鱼米之乡");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "江南风情");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "快餐");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "小盘菜");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "早点窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "面食窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "蒸饭窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "鱼粉窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "合一楼");
+        values.put("window_name", "饮吧窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        /*
+        学一食堂
+        */
+
+        values.put("canteen_name", "学一食堂");
+        values.put("window_name", "东北菜窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学一食堂");
+        values.put("window_name", "常驻窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学一食堂");
+        values.put("window_name", "拌饭窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学一食堂");
+        values.put("window_name", "饮吧窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学一食堂");
+        values.put("window_name", "特色窗口");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学二食堂");
+        values.put("window_name", "唯二窗口之一");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
+
+        values.put("canteen_name", "学二食堂");
+        values.put("window_name", "唯二窗口之二");
+        nullColumnHack = "values(null,?,?)";
+        db.insert("window_table", nullColumnHack, values);
 
     }
 
@@ -110,6 +200,7 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
+
     //根据食堂名查询对应的窗口列表
     @SuppressLint("Range")
     public List<WindowInfo> queryWindowListData(String diningName) {
@@ -129,8 +220,9 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
     //删除操作
-   //1.删除窗口
+    //1.删除窗口
     public int deleteWindow(String canteen_name, String window_name) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -140,6 +232,7 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
+
     //2.删除食堂
     public int deleteCanteen(String canteen_name) {
         //获取SQLiteDatabase实例
