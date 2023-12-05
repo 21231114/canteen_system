@@ -3,12 +3,16 @@ package com.example.myapplication.User;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.myapplication.Admin.adapter.FoodListAdapter;
 import com.example.myapplication.Admin.fragment.UsersFragment;
 import com.example.myapplication.R;
+import com.example.myapplication.User.Adapter.CanteenListAdapter;
 import com.example.myapplication.User.fragment.FavorFragment;
 import com.example.myapplication.User.fragment.HistoryFragment;
 import com.example.myapplication.User.fragment.HomeFragment;
@@ -21,12 +25,18 @@ public class MainActivity2 extends AppCompatActivity {
     private FavorFragment favorFragment;
     private UserCenterFragment userCenterFragment;
     private BottomNavigationView bottomNavigationView;
+    private String now_user_name;//知道当前用户是谁
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        Intent intent = getIntent();
+        now_user_name = intent.getStringExtra("user_name");
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -59,8 +69,7 @@ public class MainActivity2 extends AppCompatActivity {
             } else {
                 fragmentTransaction.show(homeFragment);//因为之前一定加载过，所以系统会自动知道加到哪个容器里
             }
-        }
-        else if(position==1){
+        } else if (position == 1) {
             //当前是收藏界面
             if (favorFragment == null) {
                 //还没有加载过这个布局
@@ -69,7 +78,7 @@ public class MainActivity2 extends AppCompatActivity {
             } else {
                 fragmentTransaction.show(favorFragment);
             }
-        } else if(position==2){
+        } else if (position == 2) {
             //当前是历史记录界面
             if (historyFragment == null) {
                 //还没有加载过这个布局
@@ -78,8 +87,7 @@ public class MainActivity2 extends AppCompatActivity {
             } else {
                 fragmentTransaction.show(historyFragment);
             }
-        }
-        else{
+        } else {
             if (userCenterFragment == null) {
                 //还没有加载过这个布局
                 userCenterFragment = new UserCenterFragment();
