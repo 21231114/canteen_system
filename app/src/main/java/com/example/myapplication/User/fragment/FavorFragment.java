@@ -1,5 +1,6 @@
 package com.example.myapplication.User.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -9,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
 import com.example.myapplication.User.Adapter.FavorListAdapter;
+import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
@@ -50,6 +53,25 @@ public class FavorFragment extends Fragment {
         favorListAdapter = new FavorListAdapter();//适配器需要数据接口
         myRecycleView.setAdapter(favorListAdapter);//一定一定一定记得将视图与适配器绑定
         loadData();
+        favorListAdapter.setFavorListOnClickItemListener(new FavorListAdapter.FavorListOnClickItemListener() {
+            @Override
+            public void onItemRemoveClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                int food_id = 0;
+                if (itemView != null) {
+                    food_id = (int) itemView.getTag();
+//                    Toast.makeText(getActivity(), Integer.toString(food_id), Toast.LENGTH_SHORT).show();
+                }
+                int row = FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, food_id);
+                if(row>0){
+                    Toast.makeText(getActivity(), "移除成功", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "移除失败", Toast.LENGTH_SHORT).show();
+                }
+                loadData();
+            }
+        });
     }
 
     public void loadData() {

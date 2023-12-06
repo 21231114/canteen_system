@@ -95,7 +95,15 @@ public class FavorDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
-
+    public int deleteFavor(int user_id,int food_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("favor_table", " user_id=? and food_id=?", new String[]{user_id + "",food_id+""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
     public int deleteFavorByUserId(int user_id) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();

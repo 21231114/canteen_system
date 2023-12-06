@@ -51,7 +51,9 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.MyHo
         holder.food_name.setText(foodInfo.getFood_name());
         holder.canteen_name.setText(foodInfo.getCanteen_name());
         holder.window_name.setText(foodInfo.getWindow_name());
-       // Toast.makeText(holder.itemView.getContext(), foodInfo.getFood_name(), Toast.LENGTH_SHORT).show();
+        holder.itemView.setTag(food_id);
+
+        // Toast.makeText(holder.itemView.getContext(), foodInfo.getFood_name(), Toast.LENGTH_SHORT).show();
         holder.itemView.findViewById(R.id.remove_favor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +72,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.MyHo
         Button remove_favor;
         TextView canteen_name;
         TextView window_name;
+
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
