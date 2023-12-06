@@ -4,6 +4,35 @@ public class FoodInfo {
     private int food_id;
     private String food_name;
     private int food_type;
+    private String food_price;
+
+    public FoodInfo(int food_id, String food_name, int food_type, String food_price, String food_cnt, String canteen_name, String window_name) {
+        this.food_id = food_id;
+        this.food_name = food_name;
+        this.food_type = food_type;
+        this.food_price = food_price;
+        this.food_cnt = food_cnt;
+        this.canteen_name = canteen_name;
+        this.window_name = window_name;
+    }
+
+    public String getFood_price() {
+        return food_price;
+    }
+
+    public void setFood_price(String food_price) {
+        this.food_price = food_price;
+    }
+
+    public String getFood_cnt() {
+        return food_cnt;
+    }
+
+    public void setFood_cnt(String food_cnt) {
+        this.food_cnt = food_cnt;
+    }
+
+    private String food_cnt;
 
     public int getFood_type() {
         return food_type;

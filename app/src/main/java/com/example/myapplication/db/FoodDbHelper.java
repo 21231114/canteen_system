@@ -1352,6 +1352,14 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         values.put("food_type", 0);
         nullColumnHack = "values(null,?,?,?,?)";
         db.insert("food_table", nullColumnHack, values);
+
+        String sql = "ALTER TABLE food_table"
+                + " ADD COLUMN food_price text  DEFAULT '10'";
+        db.execSQL(sql);
+
+        sql = "ALTER TABLE food_table"
+                + " ADD COLUMN food_cnt text  DEFAULT '100'";
+        db.execSQL(sql);
     }
 
     @Override
@@ -1468,14 +1476,16 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getReadableDatabase();
         List<FoodInfo> list = new ArrayList<>();
-        String sql = "select food_id,food_name,canteen_name,window_name,food_type from food_table where canteen_name=? and window_name=?";
+        String sql = "select food_id,food_name,canteen_name,window_name,food_type,food_price,food_cnt from food_table where canteen_name=? and window_name=?";
         String[] selectionArgs = {canteen_name, window_name};//查询条件
         Cursor cursor = db.rawQuery(sql, selectionArgs);
         while (cursor.moveToNext()) {
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
             int food_type = cursor.getInt(cursor.getColumnIndex("food_type"));
             String food_name = cursor.getString(cursor.getColumnIndex("food_name"));
-            list.add(new FoodInfo(food_id, food_name, food_type, canteen_name, window_name));
+            String food_price = cursor.getString(cursor.getColumnIndex("food_price"));
+            String food_cnt = cursor.getString(cursor.getColumnIndex("food_cnt"));
+            list.add(new FoodInfo(food_id, food_name, food_type, food_price, food_cnt, canteen_name, window_name));
         }
         cursor.close();
         db.close();

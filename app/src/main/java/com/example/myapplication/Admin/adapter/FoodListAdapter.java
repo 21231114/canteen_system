@@ -46,6 +46,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
     public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
         String foodName = dataList.get(position).getFood_name();
         int food_type = dataList.get(position).getFood_type();
+        String food_price = dataList.get(position).getFood_price();
+        String food_cnt = dataList.get(position).getFood_cnt();
         holder.food_name.setText(foodName);
         if (food_type == 0)
             holder.food_type.setText("饮品");
@@ -54,6 +56,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
         } else {
             holder.food_type.setText("正餐");
         }
+        holder.food_price.setText(food_price);
+        holder.food_cnt.setText(food_cnt);
         holder.itemView.findViewById(R.id.delete_food).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +83,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
         TextView food_name;
         TextView food_type;
         Button delete_food;
+        TextView food_price;
+        TextView food_cnt;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +92,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
             //初始化控件
             food_name = itemView.findViewById(R.id.food_name);
             food_type = itemView.findViewById(R.id.food_type);
+            food_price = itemView.findViewById(R.id.food_price);
+            food_cnt = itemView.findViewById(R.id.food_cnt);
             delete_food = itemView.findViewById(R.id.delete_food);
         }
     }
