@@ -67,14 +67,22 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
+                int food_cnt = Integer.parseInt(foodInfo.getFood_cnt());
                 String food_time = getTime();
-                int row = HistoryDbHelper.getInstance(ShowFoodsActivity.this).addHistory(now_user_id, food_id, food_time);
-                if(row>0){
-                    Toast.makeText(ShowFoodsActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
+                if (food_cnt == 0) {
+                    Toast.makeText(ShowFoodsActivity.this, "已售罄,购买失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    int row = HistoryDbHelper.getInstance(ShowFoodsActivity.this).addHistory(now_user_id, food_id, food_time);
+                    if (row > 0) {
+                        Toast.makeText(ShowFoodsActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
+                        String now_food_cnt = Integer.toString(food_cnt - 1);
+                        FoodDbHelper.getInstance(ShowFoodsActivity.this).updateFoodCnt(foodInfo.getCanteen_name(), foodInfo.getWindow_name(), foodInfo.getFood_name(), now_food_cnt);
+                    } else {
+                        Toast.makeText(ShowFoodsActivity.this, "购买失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(ShowFoodsActivity.this, "购买失败", Toast.LENGTH_SHORT).show();
-                }
+                loadData();//余量可能会改变
             }
 
             @Override
