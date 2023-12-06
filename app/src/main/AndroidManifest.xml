@@ -79,6 +79,10 @@
             android:name=".Admin.dialog.ModifyFoodCntActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".Admin.dialog.ModifyRegisterTypeActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>

@@ -9,7 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.UserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDbHelper extends SQLiteOpenHelper {
     private static UserDbHelper sHelper;
@@ -20,6 +24,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
     public UserDbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
+
     //创建单例，供使用调用该类里面的的增删改查的方法
     public synchronized static UserDbHelper getInstance(Context context) {
         if (null == sHelper) {
@@ -43,7 +48,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
         String nullColumnHack = "values(null,?,?,?)";
         db.insert("user_table", nullColumnHack, values);
 
-      values = new ContentValues();
+        values = new ContentValues();
         values.put("username", "2");
         values.put("password", "1");
         values.put("register_type", "1");
@@ -56,6 +61,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+
     //实现登录
     @SuppressLint("Range")//减少警告
     public UserInfo login(String username) {
@@ -76,6 +82,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return userInfo;
     }
+
     //实现注册
     public int register(String username, String password, int register_type) {
         //获取SQLiteDatabase实例
@@ -92,6 +99,69 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return insert;
     }
-    //TODO 在这里根据自己的业务需求，编写增删改查的方法，如下所示
 
+    @SuppressLint("Range")
+    public List<UserInfo> queryUserListData() {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        List<UserInfo> list = new ArrayList<>();
+        String sql = "select user_id,username,password,register_type  from user_table";
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int user_id = cursor.getInt(cursor.getColumnIndex("user_id"));
+            String password = cursor.getString(cursor.getColumnIndex("password"));
+            String username = cursor.getString(cursor.getColumnIndex("username"));
+            int register_type = cursor.getInt(cursor.getColumnIndex("register_type"));
+
+            list.add(new UserInfo(user_id, username, password, register_type));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+    public int deleteUser(String username) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("user_table", " username=?", new String[]{username});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    public int initPassword(String username) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("password", "000000");//初始密码为000000
+        // 执行SQL
+        int update = db.update("user_table", values, " username=?", new String[]{username});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
+    public int updatePassword(String username,String password) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("password", password);
+        // 执行SQL
+        int update = db.update("user_table", values, " username=?", new String[]{username});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
+    public int updateRegisterType(String username,int register_type) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("register_type", register_type);
+        // 执行SQL
+        int update = db.update("user_table", values, " username=?", new String[]{username});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
 }
