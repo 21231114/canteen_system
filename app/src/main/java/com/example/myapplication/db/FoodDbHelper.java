@@ -1590,4 +1590,5 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
+
 }

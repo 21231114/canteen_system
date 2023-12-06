@@ -17,10 +17,14 @@ import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.FoodsListAdapter;
 import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
+import com.example.myapplication.db.HistoryDbHelper;
 import com.example.myapplication.entity.FoodInfo;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ShowFoodsActivity extends AppCompatActivity {
     private RecyclerView myRecycleView;
@@ -59,9 +63,18 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
             @Override
             public void onItemAddOrderClick(int position) {
+                //Todo:差余量，该余量
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                String food_time = getTime();
+                int row = HistoryDbHelper.getInstance(ShowFoodsActivity.this).addHistory(now_user_id, food_id, food_time);
+                if(row>0){
+                    Toast.makeText(ShowFoodsActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(ShowFoodsActivity.this, "购买失败", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -69,10 +82,10 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
-                if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id,1) != null) {
+                if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id, 1) != null) {
                     Toast.makeText(ShowFoodsActivity.this, "添加失败，已经收藏该菜品", Toast.LENGTH_SHORT).show();
                 } else {
-                    FavorDbHelper.getInstance(ShowFoodsActivity.this).addFavor(now_user_id, food_id,1);
+                    FavorDbHelper.getInstance(ShowFoodsActivity.this).addFavor(now_user_id, food_id, 1);
                     Toast.makeText(ShowFoodsActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -104,5 +117,12 @@ public class ShowFoodsActivity extends AppCompatActivity {
         recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
         viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         return viewHolder.itemView;
+    }
+
+    public String getTime() {
+        DateFormat dfgmt = new java.text.SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+        dfgmt.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        String nowTime = dfgmt.format(new Date());
+        return nowTime;
     }
 }

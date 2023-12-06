@@ -88,6 +88,7 @@ public class MainActivity2 extends AppCompatActivity {
                 historyFragment = new HistoryFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, historyFragment);
             } else {
+                historyFragment.loadData();
                 fragmentTransaction.show(historyFragment);
             }
         } else {
