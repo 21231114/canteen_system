@@ -87,6 +87,10 @@
             android:name=".Admin.dialog.AddUserActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".User.dialog.ModifyHistoryFoodActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>

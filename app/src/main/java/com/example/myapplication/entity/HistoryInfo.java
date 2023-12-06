@@ -1,6 +1,8 @@
 package com.example.myapplication.entity;
 
-public class HistoryInfo {
+import java.io.Serializable;
+
+public class HistoryInfo implements Serializable {
     int history_id;
     int user_id;
 

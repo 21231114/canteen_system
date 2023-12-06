@@ -1,6 +1,7 @@
 package com.example.myapplication.User;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,6 +21,8 @@ import com.example.myapplication.User.fragment.HomeFragment;
 import com.example.myapplication.User.fragment.UserCenterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
+
 public class MainActivity2 extends AppCompatActivity {
     private HomeFragment homeFragment;
     private HistoryFragment historyFragment;
@@ -37,7 +40,7 @@ public class MainActivity2 extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         Intent intent = getIntent();
-        now_user_id = intent.getIntExtra("user_id",0);
+        now_user_id = intent.getIntExtra("user_id", 0);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -117,5 +120,22 @@ public class MainActivity2 extends AppCompatActivity {
         if (userCenterFragment != null) {
             fragmentTransaction.hide(userCenterFragment);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (historyFragment != null) {
+            historyFragment.loadData();
+        }
+        if (homeFragment != null) {
+            homeFragment.loadData();
+        }
+        if (favorFragment != null) {
+            favorFragment.loadData();
+        }
+//        if (homeFragment != null) {
+//            omeFragment.loadData();
+//        }
     }
 }

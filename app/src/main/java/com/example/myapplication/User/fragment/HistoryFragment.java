@@ -1,5 +1,6 @@
 package com.example.myapplication.User.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.HistoryListAdapter;
+import com.example.myapplication.User.dialog.ModifyHistoryFoodActivity;
 import com.example.myapplication.db.HistoryDbHelper;
 import com.example.myapplication.entity.HistoryInfo;
 
@@ -47,6 +50,29 @@ public class HistoryFragment extends Fragment {
         myRecycleView.setAdapter(historyListAdapter);
         loadData();
 
+        historyListAdapter.setHistoryListOnClickItemListener(new HistoryListAdapter.HistoryListOnClickItemListener() {
+            @Override
+            public void onItemDeleteHistoryClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                HistoryInfo historyInfo = (HistoryInfo) itemView.getTag();
+                int row = HistoryDbHelper.getInstance(getActivity()).deleteHistory(historyInfo.getHistory_id());
+                if (row > 0) {
+                    Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
+                }
+                loadData();
+            }
+
+            @Override
+            public void onItemModifyHistoryFoodIdClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                HistoryInfo historyInfo = (HistoryInfo) itemView.getTag();
+                Intent intent = new Intent(getActivity(), ModifyHistoryFoodActivity.class);
+                intent.putExtra("history", historyInfo);
+                startActivity(intent);//修改历史菜品
+            }
+        });
         //设置分割线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         myRecycleView.addItemDecoration(dividerItemDecoration);
@@ -57,4 +83,18 @@ public class HistoryFragment extends Fragment {
         dataList = HistoryDbHelper.getInstance(getActivity()).queryHistoryListData();
         historyListAdapter.setDataList(dataList);
     }
+
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
+    }
+
 }
