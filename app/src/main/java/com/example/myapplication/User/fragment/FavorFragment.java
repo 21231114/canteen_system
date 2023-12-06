@@ -19,6 +19,7 @@ import com.example.myapplication.User.Adapter.FavorListAdapter;
 import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FavorDbHelper;
+import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FavorInfo;
 
@@ -63,10 +64,9 @@ public class FavorFragment extends Fragment {
 //                    Toast.makeText(getActivity(), Integer.toString(food_id), Toast.LENGTH_SHORT).show();
                 }
                 int row = FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, food_id);
-                if(row>0){
+                if (row > 0) {
                     Toast.makeText(getActivity(), "移除成功", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "移除失败", Toast.LENGTH_SHORT).show();
                 }
                 loadData();
@@ -77,7 +77,14 @@ public class FavorFragment extends Fragment {
     public void loadData() {
         dataList.clear();
         dataList = FavorDbHelper.getInstance(getActivity()).queryFavorListData(now_user_id);
-        //Toast.makeText(getActivity(), Integer.toString(dataList.size()), Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < dataList.size(); i++) {
+            if (FoodDbHelper.getInstance(getActivity()).isHasFoodByFoodId(dataList.get(i).getFood_id()) == null) {
+                //当前收藏的食物已经被删除了,因为是id所以保证后添加的食物不会有重复的
+                FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, dataList.get(i).getFood_id());
+                dataList.remove(i);
+                i--;
+            }
+        }
         favorListAdapter.setDataList(dataList);
     }
 

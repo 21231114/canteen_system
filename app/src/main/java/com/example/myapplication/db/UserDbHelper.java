@@ -36,7 +36,19 @@ public class UserDbHelper extends SQLiteOpenHelper {
                 "password text," +      //密码
                 "register_type integer" +       // 注册类型   0---用户   1---管理员
                 ")");
+        ContentValues values = new ContentValues();
+        values.put("username", "1");
+        values.put("password", "1");
+        values.put("register_type", "0");
+        String nullColumnHack = "values(null,?,?,?)";
+        db.insert("user_table", nullColumnHack, values);
 
+      values = new ContentValues();
+        values.put("username", "2");
+        values.put("password", "1");
+        values.put("register_type", "1");
+        nullColumnHack = "values(null,?,?,?)";
+        db.insert("user_table", nullColumnHack, values);
 
     }
 
