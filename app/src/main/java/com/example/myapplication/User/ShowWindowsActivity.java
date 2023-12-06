@@ -2,10 +2,13 @@ package com.example.myapplication.User;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,6 +47,25 @@ public class ShowWindowsActivity extends AppCompatActivity {
         windowListAdapter = new WindowListAdapter(dataList);
         myRecycleView.setAdapter(windowListAdapter);//一定要记得为控件配备适配器
         loadData();//初始化数据
+
+        windowListAdapter.setWindowListOnClickItemListener(new WindowListAdapter.WindowListOnClickItemListener() {
+            @Override
+            public void onItemEnterWindowClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String now_window_name = "";//获取当前要查看的是哪个食堂
+                if (itemView != null) {
+                    now_window_name = ((TextView) (itemView.findViewById(R.id.window_name))).getText().toString();
+                }
+                Intent intent = new Intent(ShowWindowsActivity.this, ShowFoodsActivity.class);
+                intent.putExtra("canteen_name", my_canteen_name);
+                intent.putExtra("window_name", now_window_name);
+                //传递要查看的窗口信息
+                startActivity(intent);
+            }
+        });
+        //设置分割线
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        myRecycleView.addItemDecoration(dividerItemDecoration);
     }
 
     public void loadData() {
@@ -53,5 +75,18 @@ public class ShowWindowsActivity extends AppCompatActivity {
             dataList.add(windowInfoList.get(i).getWindow_name());
         }
         windowListAdapter.setDataList(dataList);
+    }
+
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
     }
 }
