@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Admin.adapter.UserListAdapter;
+import com.example.myapplication.Admin.dialog.AddUserActivity;
 import com.example.myapplication.Admin.dialog.ModifyRegisterTypeActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.db.UserDbHelper;
@@ -46,6 +47,13 @@ public class UsersFragment extends Fragment {
         userListAdapter = new UserListAdapter();
         myRecycleView.setAdapter(userListAdapter);
         loadData();
+        rootView.findViewById(R.id.add_user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddUserActivity.class);
+                startActivity(intent);
+            }
+        });
         userListAdapter.setUserListOnClickItemListener(new UserListAdapter.UserListOnClickItemListener() {
             @Override
             public void onItemDeleteUserClick(int position) {
@@ -81,6 +89,7 @@ public class UsersFragment extends Fragment {
                 }
             }
         });
+
         //设置分割线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         myRecycleView.addItemDecoration(dividerItemDecoration);
