@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 
 public class HistoryFragment extends Fragment {
+    private String now_user_name;
+
+    public HistoryFragment(String now_user_name) {
+        this.now_user_name = now_user_name;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

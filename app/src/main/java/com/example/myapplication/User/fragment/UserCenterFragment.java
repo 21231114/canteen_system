@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 
 public class UserCenterFragment extends Fragment {
+    private String now_user_name;
+
+    public UserCenterFragment(String now_user_name) {
+        this.now_user_name = now_user_name;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

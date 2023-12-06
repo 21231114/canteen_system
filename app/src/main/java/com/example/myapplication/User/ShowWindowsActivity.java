@@ -31,6 +31,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
     private WindowListAdapter windowListAdapter;
     private List<String> dataList = new ArrayList<>();
     private String my_canteen_name = "";
+    private String now_user_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_windows);
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
+        now_user_name = intent.getStringExtra("user_name");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,6 +61,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShowWindowsActivity.this, ShowFoodsActivity.class);
                 intent.putExtra("canteen_name", my_canteen_name);
                 intent.putExtra("window_name", now_window_name);
+                intent.putExtra("user_name", now_user_name);
                 //传递要查看的窗口信息
                 startActivity(intent);
             }

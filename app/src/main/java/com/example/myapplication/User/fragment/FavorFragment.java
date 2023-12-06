@@ -12,6 +12,11 @@ import com.example.myapplication.R;
 
 
 public class FavorFragment extends Fragment {
+    private String now_user_name;
+
+    public FavorFragment(String now_user_name) {
+        this.now_user_name = now_user_name;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

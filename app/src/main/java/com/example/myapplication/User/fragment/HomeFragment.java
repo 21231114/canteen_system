@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView myRecycleView;//当前展示列表的控件
     private CanteenListAdapter canteenListAdapter;
     private List<String> dataList = new ArrayList<>();
+    private String now_user_name;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +41,10 @@ public class HomeFragment extends Fragment {
         //初始化控件
         myRecycleView = rootView.findViewById(R.id.canteenRecyclerView);
         return rootView;
+    }
+
+    public HomeFragment(String now_user_name) {
+        this.now_user_name = now_user_name;
     }
 
     @Override
@@ -60,6 +65,7 @@ public class HomeFragment extends Fragment {
                 }
                 Intent intent = new Intent(getActivity(), ShowWindowsActivity.class);
                 intent.putExtra("canteen_name", now_canteen_name);
+                intent.putExtra("user_name", now_user_name);
                 //传递要查看的窗口信息
                 startActivity(intent);
             }

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Admin.ShowFoodActivity;
 import com.example.myapplication.Admin.adapter.FoodListAdapter;
@@ -25,6 +27,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
     private List<FoodInfo> foodList = new ArrayList<>();
     private String my_canteen_name = "";
     private String my_window_name = "";
+    private String now_user_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
         my_window_name = intent.getStringExtra("window_name");
+        now_user_name = intent.getStringExtra("user_name");
         //控件
         myRecycleView = findViewById(R.id.foodsRecyclerView);
         //标题
@@ -46,31 +50,41 @@ public class ShowFoodsActivity extends AppCompatActivity {
         loadData();//初始化数据
 
         //设置recycleView每个itemView的按钮操作
-    myFoodsListAdapter.setMyFoodsListOnClickItemListener(new FoodsListAdapter.FoodsListOnClickItemListener() {
-        @Override
-        public void onItemEnterCommentClick(int position) {
+        myFoodsListAdapter.setMyFoodsListOnClickItemListener(new FoodsListAdapter.FoodsListOnClickItemListener() {
+            @Override
+            public void onItemEnterCommentClick(int position) {
 
-        }
+            }
 
-        @Override
-        public void onItemAddOrderClick(int position) {
+            @Override
+            public void onItemAddOrderClick(int position) {
 
-        }
+            }
 
-        @Override
-        public void onItemAddFavorClick(int position) {
-
-        }
-    });
+            @Override
+            public void onItemAddFavorClick(int position) {
+                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
+                String now_food_name = tv_food_name.getText().toString();
+                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                Toast.makeText(ShowFoodsActivity.this, "food_id:"+food_id+",user_name:"+now_user_name, Toast.LENGTH_SHORT).show();
+            }
+        });
         //设置分割线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         myRecycleView.addItemDecoration(dividerItemDecoration);
     }
+
     public void loadData() {
         foodList.clear();
         foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListData(my_canteen_name, my_window_name);
         myFoodsListAdapter.setDataList(foodList);
     }
+
+    public int getItemFoodId(String canteen_name, String window_name, String food_name) {
+        FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFood(canteen_name, window_name, food_name);
+        return foodInfo.getFood_id();
+    }
+
     public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
         if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
             return null;

@@ -1413,7 +1413,8 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-//一系列更新操作
+
+    //一系列更新操作
     public int updateFoodType(String canteen_name, String window_name, String food_name, int food_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -1426,6 +1427,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
+
     public int updateFoodPrice(String canteen_name, String window_name, String food_name, String food_price) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -1451,6 +1453,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
+
     //同一食堂，窗口不能含有相同的食物
     public boolean isHasFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
@@ -1465,6 +1468,25 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return ans;
+    }
+
+    @SuppressLint("Range")
+    public FoodInfo queryFood(String canteen_name, String window_name, String food_name) {
+        SQLiteDatabase db = getReadableDatabase();
+        FoodInfo foodInfo = new FoodInfo(0, "", 0, "", "");
+        String sql = "select food_id,food_name,canteen_name,food_type,window_name,food_price,food_cnt  from food_table where canteen_name=? and window_name=? and food_name=?";
+        String[] selectionArgs = {canteen_name, window_name, food_name};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
+            int food_type = cursor.getInt(cursor.getColumnIndex("food_type"));
+            String food_cnt = cursor.getString(cursor.getColumnIndex("food_cnt"));
+            String food_price = cursor.getString(cursor.getColumnIndex("food_price"));
+            foodInfo = new FoodInfo(food_id, food_name, food_type, food_price, food_cnt, canteen_name, window_name);
+        }
+        cursor.close();
+        db.close();
+        return foodInfo;
     }
 
     //更新食物对应的食堂的名字
