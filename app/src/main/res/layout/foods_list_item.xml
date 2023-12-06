@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="50dp">
+
+            <TextView
+                android:id="@+id/food_name"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="xxx" />
+
+            <TextView
+                android:id="@+id/food_type"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="类别码" />
+
+            <TextView
+                android:id="@+id/food_price"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="价格" />
+
+            <TextView
+                android:id="@+id/food_cnt"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="数量" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/linear">
+
+
+            <Button
+                android:id="@+id/enter_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="查看评论" />
+
+            <Button
+                android:id="@+id/add_order"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="点单" />
+
+            <Button
+                android:id="@+id/add_favor"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:text="添加收藏" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
