@@ -56,7 +56,9 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
         } else {
             holder.food_type.setText("正餐");
         }
+        food_price = food_price + "元";
         holder.food_price.setText(food_price);
+        food_cnt = "剩余" + food_cnt + "份";
         holder.food_cnt.setText(food_cnt);
         holder.itemView.findViewById(R.id.delete_food).setOnClickListener(new View.OnClickListener() {
             @Override

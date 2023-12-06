@@ -1,6 +1,7 @@
 package com.example.myapplication.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -66,10 +67,9 @@ public class ShowFoodActivity extends AppCompatActivity {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
                 String food_name = ((TextView) itemView.findViewById(R.id.food_name)).getText().toString();
                 int row = FoodDbHelper.getInstance(ShowFoodActivity.this).deleteFood(my_canteen_name, my_window_name, food_name);
-                if(row>0){
+                if (row > 0) {
                     Toast.makeText(ShowFoodActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     Toast.makeText(ShowFoodActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                 }
                 loadData();//重新加载食物列表
@@ -86,6 +86,9 @@ public class ShowFoodActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+//设置分割线
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        myRecycleView.addItemDecoration(dividerItemDecoration);
     }
 
     public void loadData() {
