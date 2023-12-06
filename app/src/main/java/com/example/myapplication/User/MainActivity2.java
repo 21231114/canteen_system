@@ -68,6 +68,7 @@ public class MainActivity2 extends AppCompatActivity {
                 homeFragment = new HomeFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, homeFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
             } else {
+                homeFragment.loadData();//重新加载数据
                 fragmentTransaction.show(homeFragment);//因为之前一定加载过，所以系统会自动知道加到哪个容器里
             }
         } else if (position == 1) {
@@ -77,6 +78,7 @@ public class MainActivity2 extends AppCompatActivity {
                 favorFragment = new FavorFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, favorFragment);
             } else {
+                favorFragment.loadData();
                 fragmentTransaction.show(favorFragment);
             }
         } else if (position == 2) {

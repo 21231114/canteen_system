@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/canteen_name"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="xxx" />
+
+    <TextView
+        android:id="@+id/window_name"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="xxx" />
+
+    <TextView
+        android:id="@+id/food_name"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="xxx" />
+
+    <Button
+        android:id="@+id/remove_favor"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="移除收藏" />
+</androidx.appcompat.widget.LinearLayoutCompat>

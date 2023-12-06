@@ -1471,6 +1471,25 @@ public class FoodDbHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
+    public FoodInfo isHasFoodByFoodId(int food_id) {
+        SQLiteDatabase db = getReadableDatabase();
+        FoodInfo foodInfo = null;
+        String sql = "select food_id,food_name,food_type,canteen_name,window_name  from food_table where food_id=?";
+        String[] selectionArgs = {food_id + ""};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            int food_type = cursor.getInt(cursor.getColumnIndex("food_type"));
+            String food_name = cursor.getString(cursor.getColumnIndex("food_name"));
+            String canteen_name = cursor.getString(cursor.getColumnIndex("canteen_name"));
+            String window_name = cursor.getString(cursor.getColumnIndex("window_name"));
+            foodInfo = new FoodInfo(food_id, food_name, food_type, canteen_name, window_name);
+        }
+        cursor.close();
+        db.close();
+        return foodInfo;
+    }
+
+    @SuppressLint("Range")
     public FoodInfo queryFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
         FoodInfo foodInfo = new FoodInfo(0, "", 0, "", "");

@@ -15,6 +15,7 @@ import com.example.myapplication.Admin.ShowFoodActivity;
 import com.example.myapplication.Admin.adapter.FoodListAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.FoodsListAdapter;
+import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.entity.FoodInfo;
 
@@ -37,7 +38,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
         my_window_name = intent.getStringExtra("window_name");
-        now_user_id = intent.getIntExtra("user_id",0);
+        now_user_id = intent.getIntExtra("user_id", 0);
         //控件
         myRecycleView = findViewById(R.id.foodsRecyclerView);
         //标题
@@ -66,7 +67,12 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
-                Toast.makeText(ShowFoodsActivity.this, "food_id:"+food_id+",user_id:"+now_user_id, Toast.LENGTH_SHORT).show();
+                if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id) != null) {
+                    Toast.makeText(ShowFoodsActivity.this, "添加失败，已经收藏该菜品", Toast.LENGTH_SHORT).show();
+                } else {
+                    FavorDbHelper.getInstance(ShowFoodsActivity.this).addFavor(now_user_id, food_id);
+                    Toast.makeText(ShowFoodsActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         //设置分割线

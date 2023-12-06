@@ -13,9 +13,12 @@ import com.example.myapplication.entity.FavorInfo;
 import com.example.myapplication.entity.UserInfo;
 import com.example.myapplication.entity.WindowInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FavorDbHelper extends SQLiteOpenHelper {
     private static FavorDbHelper sHelper;
-    private static final String DB_NAME = "user.db";//数据库名
+    private static final String DB_NAME = "favor.db";//数据库名
     private static final int VERSION = 1;//版本号
 
     public FavorDbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -47,11 +50,11 @@ public class FavorDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         //填充占位符
-        values.put("user_name", user_id);
+        values.put("user_id", user_id);
         values.put("food_id", food_id);
         String nullColumnHack = "values(null,?,?)";
         //执行
-        int insert = (int) db.insert("food_table", nullColumnHack, values);
+        int insert = (int) db.insert("favor_table", nullColumnHack, values);
         //插入成功，返回id,插入失败返回-1
         db.close();
         return insert;
@@ -72,5 +75,44 @@ public class FavorDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return favorInfo;
+    }
+
+    //查询用户的收藏
+    @SuppressLint("Range")
+    public List<FavorInfo> queryFavorListData(int user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        List<FavorInfo> list = new ArrayList<>();
+        String sql = "select favor_id,user_id,food_id  from favor_table where user_id=?";
+        String[] selectionArgs = {user_id + ""};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        while (cursor.moveToNext()) {
+            int favor_id = cursor.getInt(cursor.getColumnIndex("favor_id"));
+            int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
+            list.add(new FavorInfo(favor_id, user_id, food_id));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    public int deleteFavorByUserId(int user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("favor_table", " user_id=?", new String[]{user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+
+    public int deleteFavorByFoodId(int food_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("favor_table", " food_id=?", new String[]{food_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
     }
 }
