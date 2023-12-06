@@ -20,6 +20,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
 import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FoodInfo;
 
@@ -68,6 +69,23 @@ public class HomeFragment extends Fragment {
                 intent.putExtra("user_id", now_user_id);
                 //传递要查看的窗口信息
                 startActivity(intent);
+            }
+
+            @Override
+            public void onItemAddFavorClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String now_canteen_name = "";//获取当前要查看的是哪个食堂
+                if (itemView != null) {
+                    now_canteen_name = ((TextView) (itemView.findViewById(R.id.canteen_name))).getText().toString();
+                }
+                CanteenInfo canteenInfo = CanteenDbHelper.getInstance(getActivity()).isHasCanteen(now_canteen_name);
+                int canteen_id = canteenInfo.getCanteen_id();
+                if (FavorDbHelper.getInstance(getActivity()).isHasFavor(now_user_id, canteen_id, 3) != null) {
+                    Toast.makeText(getActivity(), "添加失败，已经收藏该食堂", Toast.LENGTH_SHORT).show();
+                } else {
+                    FavorDbHelper.getInstance(getActivity()).addFavor(now_user_id, canteen_id, 3);
+                    Toast.makeText(getActivity(), "添加成功", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);

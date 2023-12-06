@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
 import com.example.myapplication.User.Adapter.WindowListAdapter;
 import com.example.myapplication.db.CanteenDbHelper;
+import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
@@ -39,7 +40,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_windows);
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
-        now_user_id = intent.getIntExtra("user_id",0);
+        now_user_id = intent.getIntExtra("user_id", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,9 +62,26 @@ public class ShowWindowsActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShowWindowsActivity.this, ShowFoodsActivity.class);
                 intent.putExtra("canteen_name", my_canteen_name);
                 intent.putExtra("window_name", now_window_name);
-                intent.putExtra("user_id",  now_user_id);
+                intent.putExtra("user_id", now_user_id);
                 //传递要查看的窗口信息
                 startActivity(intent);
+            }
+
+            @Override
+            public void onItemAddFavorClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String now_window_name = "";//获取当前要查看的是哪个食堂
+                if (itemView != null) {
+                    now_window_name = ((TextView) (itemView.findViewById(R.id.window_name))).getText().toString();
+                }
+                WindowInfo windowInfo = WindowDbHelper.getInstance(ShowWindowsActivity.this).isHasWindow(my_canteen_name, now_window_name);
+                int window_id = windowInfo.getWindow_id();
+                if (FavorDbHelper.getInstance(ShowWindowsActivity.this).isHasFavor(now_user_id, window_id, 2) != null) {
+                    Toast.makeText(ShowWindowsActivity.this, "添加失败，已经收藏该窗口", Toast.LENGTH_SHORT).show();
+                } else {
+                    FavorDbHelper.getInstance(ShowWindowsActivity.this).addFavor(now_user_id, window_id, 2);
+                    Toast.makeText(ShowWindowsActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         //设置分割线

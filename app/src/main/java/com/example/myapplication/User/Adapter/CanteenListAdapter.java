@@ -38,6 +38,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
     public interface CanteenListOnClickItemListener {
         void onItemEnterCanteenClick(int position);//接收点某个具体项菜单的操作函数
 
+        void onItemAddFavorClick(int position);
+
     }
 
     @NonNull
@@ -56,6 +58,13 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             public void onClick(View view) {
                 if (canteenListOnClickItemListener != null)
                     canteenListOnClickItemListener.onItemEnterCanteenClick(position);
+            }
+        });
+        holder.itemView.findViewById(R.id.add_favor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (canteenListOnClickItemListener != null)
+                    canteenListOnClickItemListener.onItemAddFavorClick(position);
             }
         });
     }

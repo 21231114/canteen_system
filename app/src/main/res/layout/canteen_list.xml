@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/canteen_name"
-        android:layout_width="250dp"
+        android:layout_width="175dp"
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -15,4 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="进入食堂" />
+    <Button
+        android:id="@+id/add_favor"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="收藏食堂" />
 </androidx.appcompat.widget.LinearLayoutCompat>

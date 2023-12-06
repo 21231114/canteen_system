@@ -35,7 +35,7 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 
     public interface WindowListOnClickItemListener {
         void onItemEnterWindowClick(int position);//接收点某个具体项菜单的操作函数
-
+        void onItemAddFavorClick(int position);//接收点某个具体项菜单的操作函数
     }
 
     @NonNull
@@ -54,6 +54,14 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
             public void onClick(View view) {
                 if (windowListOnClickItemListener != null) {
                     windowListOnClickItemListener.onItemEnterWindowClick(position);
+                }
+            }
+        });
+        holder.itemView.findViewById(R.id.add_favor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (windowListOnClickItemListener != null) {
+                    windowListOnClickItemListener.onItemAddFavorClick(position);
                 }
             }
         });
