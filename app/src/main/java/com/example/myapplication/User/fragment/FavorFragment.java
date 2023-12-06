@@ -20,6 +20,7 @@ import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
+import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FavorInfo;
 
@@ -59,11 +60,13 @@ public class FavorFragment extends Fragment {
             public void onItemRemoveClick(int position) {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
                 int food_id = 0;
+                int type = 0;
                 if (itemView != null) {
-                    food_id = (int) itemView.getTag();
+                    food_id = ((FavorInfo) itemView.getTag()).getFood_id();
+                    type = ((FavorInfo) itemView.getTag()).getType();
 //                    Toast.makeText(getActivity(), Integer.toString(food_id), Toast.LENGTH_SHORT).show();
                 }
-                int row = FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, food_id);
+                int row = FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, food_id, type);
                 if (row > 0) {
                     Toast.makeText(getActivity(), "移除成功", Toast.LENGTH_SHORT).show();
                 } else {
@@ -78,11 +81,31 @@ public class FavorFragment extends Fragment {
         dataList.clear();
         dataList = FavorDbHelper.getInstance(getActivity()).queryFavorListData(now_user_id);
         for (int i = 0; i < dataList.size(); i++) {
-            if (FoodDbHelper.getInstance(getActivity()).isHasFoodByFoodId(dataList.get(i).getFood_id()) == null) {
-                //当前收藏的食物已经被删除了,因为是id所以保证后添加的食物不会有重复的
-                FavorDbHelper.getInstance(getActivity()).deleteFavor(now_user_id, dataList.get(i).getFood_id());
-                dataList.remove(i);
-                i--;
+            int food_id = dataList.get(i).getFood_id();
+            int type = dataList.get(i).getType();
+            if (type == 1) {
+                //当前收藏的是菜
+                if (FoodDbHelper.getInstance(getActivity()).isHasFoodByFoodId(food_id) == null) {
+                    //当前收藏的食物已经被删除了,因为是id所以保证后添加的食物不会有重复的
+                    FavorDbHelper.getInstance(getActivity()).deleteFavorByFoodId(food_id, type);
+                    dataList.remove(i);
+                    i--;
+                }
+            } else if (type == 2) {
+                //当前收藏的是窗口
+                if (WindowDbHelper.getInstance(getActivity()).isHasWindowById(food_id) == null) {
+                    //当前收藏的食物已经被删除了,因为是id所以保证后添加的食物不会有重复的
+                    FavorDbHelper.getInstance(getActivity()).deleteFavorByFoodId(food_id, type);
+                    dataList.remove(i);
+                    i--;
+                }
+            } else if (type == 3) {
+                if (CanteenDbHelper.getInstance(getActivity()).isHasCanteenById(food_id) == null) {
+                    FavorDbHelper.getInstance(getActivity()).deleteFavorByFoodId(food_id, type);
+                    dataList.remove(i);
+                    i--;
+                }
+                //当前收藏的是食堂
             }
         }
         favorListAdapter.setDataList(dataList);

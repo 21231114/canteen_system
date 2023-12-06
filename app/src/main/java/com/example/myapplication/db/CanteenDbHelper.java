@@ -126,7 +126,23 @@ public class CanteenDbHelper extends SQLiteOpenHelper {
         db.close();
         return canteenInfo;
     }
-
+    @SuppressLint("Range")
+    public CanteenInfo isHasCanteenById(int canteen_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        CanteenInfo canteenInfo = null;
+        String sql = "select canteen_id,canteen_name  from canteen_table where canteen_id=?";
+        String[] selectionArgs = {canteen_id+""};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            //int canteen_id = cursor.getInt(cursor.getColumnIndex("canteen_id"));
+            String canteen_name = cursor.getString(cursor.getColumnIndex("canteen_name"));
+            canteenInfo = new CanteenInfo(canteen_id, canteen_name);
+        }
+        cursor.close();
+        db.close();
+        return canteenInfo;
+    }
     //将所有数据转换为一个链表传回去
     @SuppressLint("Range")
     public List<CanteenInfo> queryCanteenListData() {

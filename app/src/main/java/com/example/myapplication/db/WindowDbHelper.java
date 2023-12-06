@@ -174,6 +174,22 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return windowInfo;
     }
+    @SuppressLint("Range")
+    public WindowInfo isHasWindowById(int window_id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "select window_id,window_name,canteen_name  from window_table where window_id=?";
+        String[] selectionArgs = {window_id+""};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        WindowInfo windowInfo = null;
+        if (cursor.moveToNext()) {
+            String window_Name = cursor.getString(cursor.getColumnIndex("window_name"));
+            String canteen_Name = cursor.getString(cursor.getColumnIndex("canteen_name"));
+            windowInfo = new WindowInfo(window_Name, window_id, canteen_Name);
+        }
+        cursor.close();
+        db.close();
+        return windowInfo;
+    }
 
     public int updateWindowCanteenName(String before_canteen_name, String canteen_name) {
         //获取SQLiteDatabase实例

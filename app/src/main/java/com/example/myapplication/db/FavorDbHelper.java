@@ -36,7 +36,8 @@ public class FavorDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table favor_table(favor_id integer primary key autoincrement, " +
                 "user_id integer ," +
-                "food_id integer" +
+                "food_id integer," +
+                "type integer" +//1:食物，2：窗口，3：食堂
                 ")");
     }
 
@@ -45,14 +46,15 @@ public class FavorDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public int addFavor(int user_id, int food_id) {
+    public int addFavor(int user_id, int food_id, int type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         //填充占位符
         values.put("user_id", user_id);
         values.put("food_id", food_id);
-        String nullColumnHack = "values(null,?,?)";
+        values.put("type", type);
+        String nullColumnHack = "values(null,?,?,?)";
         //执行
         int insert = (int) db.insert("favor_table", nullColumnHack, values);
         //插入成功，返回id,插入失败返回-1
@@ -62,15 +64,15 @@ public class FavorDbHelper extends SQLiteOpenHelper {
 
     //用户是否已经收藏食物
     @SuppressLint("Range")
-    public FavorInfo isHasFavor(int user_id, int food_id) {
+    public FavorInfo isHasFavor(int user_id, int food_id, int type) {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "select user_id,food_id,favor_id  from favor_table where user_id=? and food_id=?";
-        String[] selectionArgs = {user_id + "", food_id + ""};//查询条件
+        String sql = "select user_id,food_id,favor_id,type  from favor_table where user_id=? and food_id=? and type=?";
+        String[] selectionArgs = {user_id + "", food_id + "", type + ""};//查询条件
         Cursor cursor = db.rawQuery(sql, selectionArgs);
         FavorInfo favorInfo = null;
         if (cursor.moveToNext()) {
             int favor_id = cursor.getInt(cursor.getColumnIndex("favor_id"));
-            favorInfo = new FavorInfo(favor_id, user_id, food_id);
+            favorInfo = new FavorInfo(favor_id, user_id, food_id, type);
         }
         cursor.close();
         db.close();
@@ -83,27 +85,30 @@ public class FavorDbHelper extends SQLiteOpenHelper {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getReadableDatabase();
         List<FavorInfo> list = new ArrayList<>();
-        String sql = "select favor_id,user_id,food_id  from favor_table where user_id=?";
+        String sql = "select favor_id,user_id,food_id,type from favor_table where user_id=?";
         String[] selectionArgs = {user_id + ""};//查询条件
         Cursor cursor = db.rawQuery(sql, selectionArgs);
         while (cursor.moveToNext()) {
             int favor_id = cursor.getInt(cursor.getColumnIndex("favor_id"));
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
-            list.add(new FavorInfo(favor_id, user_id, food_id));
+            int type = cursor.getInt(cursor.getColumnIndex("type"));
+            list.add(new FavorInfo(favor_id, user_id, food_id, type));
         }
         cursor.close();
         db.close();
         return list;
     }
-    public int deleteFavor(int user_id,int food_id) {
+
+    public int deleteFavor(int user_id, int food_id, int type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 执行SQL
-        int delete = db.delete("favor_table", " user_id=? and food_id=?", new String[]{user_id + "",food_id+""});
+        int delete = db.delete("favor_table", " user_id=? and food_id=? and type=?", new String[]{user_id + "", food_id + "", type + ""});
         // 关闭数据库连接
         db.close();
         return delete;
     }
+
     public int deleteFavorByUserId(int user_id) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -114,11 +119,11 @@ public class FavorDbHelper extends SQLiteOpenHelper {
         return delete;
     }
 
-    public int deleteFavorByFoodId(int food_id) {
+    public int deleteFavorByFoodId(int food_id, int type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 执行SQL
-        int delete = db.delete("favor_table", " food_id=?", new String[]{food_id + ""});
+        int delete = db.delete("favor_table", " food_id=? and type=?", new String[]{food_id + "", type + ""});
         // 关闭数据库连接
         db.close();
         return delete;

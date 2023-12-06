@@ -12,9 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
+import com.example.myapplication.db.WindowDbHelper;
+import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FavorInfo;
 import com.example.myapplication.entity.FoodInfo;
+import com.example.myapplication.entity.WindowInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +51,22 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.MyHo
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
         int food_id = dataList.get(position).getFood_id();
-        FoodInfo foodInfo = FoodDbHelper.getInstance(holder.itemView.getContext()).isHasFoodByFoodId(food_id);
-        holder.food_name.setText(foodInfo.getFood_name());
-        holder.canteen_name.setText(foodInfo.getCanteen_name());
-        holder.window_name.setText(foodInfo.getWindow_name());
-        holder.itemView.setTag(food_id);
-
+        int type = dataList.get(position).getType();
+        //Toast.makeText(holder.itemView.getContext(), Integer.toString(type), Toast.LENGTH_SHORT).show();
+        if (type == 1) {
+            FoodInfo foodInfo = FoodDbHelper.getInstance(holder.itemView.getContext()).isHasFoodByFoodId(food_id);
+            holder.food_name.setText(foodInfo.getFood_name());
+            holder.canteen_name.setText(foodInfo.getCanteen_name());
+            holder.window_name.setText(foodInfo.getWindow_name());
+        } else if (type == 2) {
+            WindowInfo windowInfo = WindowDbHelper.getInstance(holder.itemView.getContext()).isHasWindowById(food_id);
+            holder.canteen_name.setText(windowInfo.getCanteen_name());
+            holder.window_name.setText(windowInfo.getWindow_name());
+        } else if (type == 3) {
+            CanteenInfo canteenInfo = CanteenDbHelper.getInstance(holder.itemView.getContext()).isHasCanteenById(food_id);
+            holder.canteen_name.setText(canteenInfo.getCanteen_name());
+        }
+        holder.itemView.setTag(new FavorInfo(0,0,food_id,type));
         // Toast.makeText(holder.itemView.getContext(), foodInfo.getFood_name(), Toast.LENGTH_SHORT).show();
         holder.itemView.findViewById(R.id.remove_favor).setOnClickListener(new View.OnClickListener() {
             @Override

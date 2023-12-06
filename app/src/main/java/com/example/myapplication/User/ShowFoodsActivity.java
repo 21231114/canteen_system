@@ -59,7 +59,9 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
             @Override
             public void onItemAddOrderClick(int position) {
-
+                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
+                String now_food_name = tv_food_name.getText().toString();
+                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
             }
 
             @Override
@@ -67,10 +69,10 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
-                if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id) != null) {
+                if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id,1) != null) {
                     Toast.makeText(ShowFoodsActivity.this, "添加失败，已经收藏该菜品", Toast.LENGTH_SHORT).show();
                 } else {
-                    FavorDbHelper.getInstance(ShowFoodsActivity.this).addFavor(now_user_id, food_id);
+                    FavorDbHelper.getInstance(ShowFoodsActivity.this).addFavor(now_user_id, food_id,1);
                     Toast.makeText(ShowFoodsActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                 }
             }
