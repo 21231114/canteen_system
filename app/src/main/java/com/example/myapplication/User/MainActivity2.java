@@ -26,7 +26,7 @@ public class MainActivity2 extends AppCompatActivity {
     private FavorFragment favorFragment;
     private UserCenterFragment userCenterFragment;
     private BottomNavigationView bottomNavigationView;
-    private String now_user_name;//知道当前用户是谁
+    private int now_user_id;//知道当前用户是谁
 
 
     @Override
@@ -37,7 +37,7 @@ public class MainActivity2 extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         Intent intent = getIntent();
-        now_user_name = intent.getStringExtra("user_name");
+        now_user_id = intent.getIntExtra("user_id",0);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -65,7 +65,7 @@ public class MainActivity2 extends AppCompatActivity {
             //此时是主页
             if (homeFragment == null) {
                 //还没有加载过这个布局
-                homeFragment = new HomeFragment(now_user_name);
+                homeFragment = new HomeFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, homeFragment);//要把usersFragment这个片段加载到main.xml的contentId对应的容器中
             } else {
                 fragmentTransaction.show(homeFragment);//因为之前一定加载过，所以系统会自动知道加到哪个容器里
@@ -74,7 +74,7 @@ public class MainActivity2 extends AppCompatActivity {
             //当前是收藏界面
             if (favorFragment == null) {
                 //还没有加载过这个布局
-                favorFragment = new FavorFragment(now_user_name);
+                favorFragment = new FavorFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, favorFragment);
             } else {
                 fragmentTransaction.show(favorFragment);
@@ -83,7 +83,7 @@ public class MainActivity2 extends AppCompatActivity {
             //当前是历史记录界面
             if (historyFragment == null) {
                 //还没有加载过这个布局
-                historyFragment = new HistoryFragment(now_user_name);
+                historyFragment = new HistoryFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, historyFragment);
             } else {
                 fragmentTransaction.show(historyFragment);
@@ -91,7 +91,7 @@ public class MainActivity2 extends AppCompatActivity {
         } else {
             if (userCenterFragment == null) {
                 //还没有加载过这个布局
-                userCenterFragment = new UserCenterFragment(now_user_name);
+                userCenterFragment = new UserCenterFragment(now_user_id);
                 fragmentTransaction.add(R.id.content, userCenterFragment);
             } else {
                 fragmentTransaction.show(userCenterFragment);

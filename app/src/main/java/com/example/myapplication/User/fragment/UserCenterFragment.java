@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 
 public class UserCenterFragment extends Fragment {
-    private String now_user_name;
+    private int now_user_id;
 
-    public UserCenterFragment(String now_user_name) {
-        this.now_user_name = now_user_name;
+    public UserCenterFragment(int now_user_id) {
+        this.now_user_id = now_user_id;
     }
 
     @Override

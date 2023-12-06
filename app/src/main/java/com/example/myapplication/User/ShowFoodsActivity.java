@@ -27,7 +27,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
     private List<FoodInfo> foodList = new ArrayList<>();
     private String my_canteen_name = "";
     private String my_window_name = "";
-    private String now_user_name = "";
+    private int now_user_id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
         my_window_name = intent.getStringExtra("window_name");
-        now_user_name = intent.getStringExtra("user_name");
+        now_user_id = intent.getIntExtra("user_id",0);
         //控件
         myRecycleView = findViewById(R.id.foodsRecyclerView);
         //标题
@@ -66,7 +66,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
-                Toast.makeText(ShowFoodsActivity.this, "food_id:"+food_id+",user_name:"+now_user_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShowFoodsActivity.this, "food_id:"+food_id+",user_id:"+now_user_id, Toast.LENGTH_SHORT).show();
             }
         });
         //设置分割线

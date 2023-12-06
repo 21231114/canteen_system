@@ -12,10 +12,10 @@ import com.example.myapplication.R;
 
 
 public class FavorFragment extends Fragment {
-    private String now_user_name;
+    private int now_user_id;
 
-    public FavorFragment(String now_user_name) {
-        this.now_user_name = now_user_name;
+    public FavorFragment(int now_user_id) {
+        this.now_user_id = now_user_id;
     }
 
     @Override

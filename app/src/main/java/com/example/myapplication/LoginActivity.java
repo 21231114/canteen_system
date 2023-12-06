@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (login != null && username.equals(login.getUsername()) && password.equals(login.getPassword())) {
                         if (login.getRegister_type() == 0) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
-                            intent.putExtra("user_name", username);
+                            intent.putExtra("user_id", login.getUser_id());
                             startActivity(intent);
                             Toast.makeText(LoginActivity.this, "用户登录成功", Toast.LENGTH_SHORT).show();
                         } else {

@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 
 public class HistoryFragment extends Fragment {
-    private String now_user_name;
+    private int now_user_id;
 
-    public HistoryFragment(String now_user_name) {
-        this.now_user_name = now_user_name;
+    public HistoryFragment(int now_user_id) {
+        this.now_user_id = now_user_id;
     }
 
     @Override
