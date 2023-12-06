@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Admin.adapter.FoodListAdapter;
+import com.example.myapplication.Admin.dialog.ModifyFoodCntActivity;
+import com.example.myapplication.Admin.dialog.ModifyFoodPriceActivity;
 import com.example.myapplication.Admin.dialog.ModifyFoodTypeActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.db.FoodDbHelper;
@@ -80,6 +82,28 @@ public class ShowFoodActivity extends AppCompatActivity {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
                 String food_name = ((TextView) itemView.findViewById(R.id.food_name)).getText().toString();
                 Intent intent = new Intent(ShowFoodActivity.this, ModifyFoodTypeActivity.class);
+                intent.putExtra("canteen_name", my_canteen_name);
+                intent.putExtra("window_name", my_window_name);
+                intent.putExtra("food_name", food_name);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemMOdifyFoodPriceClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String food_name = ((TextView) itemView.findViewById(R.id.food_name)).getText().toString();
+                Intent intent = new Intent(ShowFoodActivity.this, ModifyFoodPriceActivity.class);
+                intent.putExtra("canteen_name", my_canteen_name);
+                intent.putExtra("window_name", my_window_name);
+                intent.putExtra("food_name", food_name);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemMOdifyFoodCntClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                String food_name = ((TextView) itemView.findViewById(R.id.food_name)).getText().toString();
+                Intent intent = new Intent(ShowFoodActivity.this, ModifyFoodCntActivity.class);
                 intent.putExtra("canteen_name", my_canteen_name);
                 intent.putExtra("window_name", my_window_name);
                 intent.putExtra("food_name", food_name);

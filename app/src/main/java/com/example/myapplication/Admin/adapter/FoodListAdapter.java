@@ -21,9 +21,13 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
     private FoodListAdapter.FoodListOnClickItemListener myFoodListOnClickItemListener;
 
     public interface FoodListOnClickItemListener {
-        void onItemDeleteFoodClick(int position);//接收点某个具体项菜单的操作函数
+        void onItemDeleteFoodClick(int position);
 
-        void onItemMOdifyFoodTypeClick(int position);//接收点某个具体项菜单的操作函数
+        void onItemMOdifyFoodTypeClick(int position);
+
+        void onItemMOdifyFoodPriceClick(int position);
+
+        void onItemMOdifyFoodCntClick(int position);
     }
 
     public void setMyFoodListOnClickItemListener(FoodListOnClickItemListener myFoodListOnClickItemListener) {
@@ -58,7 +62,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
         }
         food_price = food_price + "元";
         holder.food_price.setText(food_price);
-        food_cnt = "剩余" + food_cnt + "份";
+        food_cnt = "余" + food_cnt + "份";
         holder.food_cnt.setText(food_cnt);
         holder.itemView.findViewById(R.id.delete_food).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +76,19 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyHold
             public void onClick(View view) {
                 //这个按钮是删除菜品
                 myFoodListOnClickItemListener.onItemMOdifyFoodTypeClick(position);
+            }
+        });
+        holder.itemView.findViewById(R.id.modify_food_price).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myFoodListOnClickItemListener.onItemMOdifyFoodPriceClick(position);
+            }
+        });
+
+        holder.itemView.findViewById(R.id.modify_food_cnt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myFoodListOnClickItemListener.onItemMOdifyFoodCntClick(position);
             }
         });
     }

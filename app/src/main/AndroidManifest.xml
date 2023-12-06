@@ -68,6 +68,14 @@
             android:name=".Admin.dialog.ModifyFoodTypeActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".Admin.dialog.ModifyFoodPriceActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".Admin.dialog.ModifyFoodCntActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>

@@ -1413,7 +1413,7 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-
+//一系列更新操作
     public int updateFoodType(String canteen_name, String window_name, String food_name, int food_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -1426,7 +1426,31 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
+    public int updateFoodPrice(String canteen_name, String window_name, String food_name, String food_price) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("food_price", food_price);
+        // 执行SQL
+        int update = db.update("food_table", values, " canteen_name=? and window_name=? and food_name=?", new String[]{canteen_name, window_name, food_name});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
 
+    public int updateFoodCnt(String canteen_name, String window_name, String food_name, String food_cnt) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("food_cnt", food_cnt);
+        // 执行SQL
+        int update = db.update("food_table", values, " canteen_name=? and window_name=? and food_name=?", new String[]{canteen_name, window_name, food_name});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
     //同一食堂，窗口不能含有相同的食物
     public boolean isHasFood(String canteen_name, String window_name, String food_name) {
         SQLiteDatabase db = getReadableDatabase();
