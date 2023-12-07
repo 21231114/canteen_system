@@ -1562,6 +1562,27 @@ public class FoodDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+    @SuppressLint("Range")
+    public List<FoodInfo> queryFoodListDataByFoodName(String food_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        List<FoodInfo> list = new ArrayList<>();
+        String sql = "select food_id,food_name,canteen_name,window_name,food_type,food_price,food_cnt from food_table where food_name=?";
+        String[] selectionArgs = {food_name};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        while (cursor.moveToNext()) {
+            int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
+            int food_type = cursor.getInt(cursor.getColumnIndex("food_type"));
+            String canteen_name = cursor.getString(cursor.getColumnIndex("canteen_name"));
+            String window_name = cursor.getString(cursor.getColumnIndex("window_name"));
+            String food_price = cursor.getString(cursor.getColumnIndex("food_price"));
+            String food_cnt = cursor.getString(cursor.getColumnIndex("food_cnt"));
+            list.add(new FoodInfo(food_id, food_name, food_type, food_price, food_cnt, canteen_name, window_name));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
     //各种删除操作
 
     //1.删除食物时

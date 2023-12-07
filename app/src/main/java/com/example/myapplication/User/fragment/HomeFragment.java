@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +19,12 @@ import com.example.myapplication.Admin.ShowFoodActivity;
 import com.example.myapplication.Admin.adapter.LeftListAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
+import com.example.myapplication.User.ShowFoodsActivity;
 import com.example.myapplication.User.ShowWindowsActivity;
 import com.example.myapplication.db.CanteenDbHelper;
 import com.example.myapplication.db.FavorDbHelper;
+import com.example.myapplication.db.FoodDbHelper;
+import com.example.myapplication.db.WindowDbHelper;
 import com.example.myapplication.entity.CanteenInfo;
 import com.example.myapplication.entity.FoodInfo;
 
@@ -32,7 +36,10 @@ public class HomeFragment extends Fragment {
     private RecyclerView myRecycleView;//当前展示列表的控件
     private CanteenListAdapter canteenListAdapter;
     private List<String> dataList = new ArrayList<>();
+    EditText et_search_content;
+    TextView search;
     private int now_user_id;
+    private String now_canteen_name = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +48,8 @@ public class HomeFragment extends Fragment {
 
         //初始化控件
         myRecycleView = rootView.findViewById(R.id.canteenRecyclerView);
+        search = rootView.findViewById(R.id.search);
+        et_search_content = rootView.findViewById(R.id.search_content);
         return rootView;
     }
 
@@ -55,7 +64,30 @@ public class HomeFragment extends Fragment {
         canteenListAdapter = new CanteenListAdapter(dataList);//适配器需要数据接口
         myRecycleView.setAdapter(canteenListAdapter);//一定一定一定记得将视图与适配器绑定
         loadData();
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String search_content = et_search_content.getText().toString();
 
+                if (CanteenDbHelper.getInstance(getActivity()).isHasCanteen(search_content) != null) {
+                    //当前输入的位食堂名
+                    now_canteen_name = search_content;
+                    loadData();
+                    now_canteen_name = null;
+                } else if (WindowDbHelper.getInstance(getActivity()).queryWindowListDataByWindow_name(search_content).size() != 0) {
+                    //当前输入的是窗口名
+
+                } else if (FoodDbHelper.getInstance(getActivity()).queryFoodListDataByFoodName(search_content).size() != 0) {
+                    //当前输入的是食物名
+                    Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);
+                    intent.putExtra("user_id", now_user_id);
+                    intent.putExtra("food_name", search_content);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "搜索不到您想要查找的内容", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         canteenListAdapter.setCanteenListOnClickItemListener(new CanteenListAdapter.CanteenListOnClickItemListener() {
             @Override
             public void onItemEnterCanteenClick(int position) {
@@ -94,9 +126,13 @@ public class HomeFragment extends Fragment {
 
     public void loadData() {
         dataList.clear();
-        List<CanteenInfo> canteenInfoList = CanteenDbHelper.getInstance(getActivity()).queryCanteenListData();
-        for (int i = 0; i < canteenInfoList.size(); i++) {
-            dataList.add(canteenInfoList.get(i).getCanteen_name());
+        if (now_canteen_name == null) {
+            List<CanteenInfo> canteenInfoList = CanteenDbHelper.getInstance(getActivity()).queryCanteenListData();
+            for (int i = 0; i < canteenInfoList.size(); i++) {
+                dataList.add(canteenInfoList.get(i).getCanteen_name());
+            }
+        } else {
+            dataList.add(now_canteen_name);
         }
         canteenListAdapter.setDataList(dataList);
     }

@@ -236,7 +236,23 @@ public class WindowDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
-
+    @SuppressLint("Range")
+    public List<WindowInfo> queryWindowListDataByWindow_name(String window_name) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        List<WindowInfo> list = new ArrayList<>();
+        String sql = "select window_id,window_name,canteen_name  from window_table where window_name=?";
+        String[] selectionArgs = {window_name};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        while (cursor.moveToNext()) {
+            int window_id = cursor.getInt(cursor.getColumnIndex("window_id"));
+            String canteen_name = cursor.getString(cursor.getColumnIndex("canteen_name"));
+            list.add(new WindowInfo(window_name, window_id, canteen_name));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
     //删除操作
     //1.删除窗口
     public int deleteWindow(String canteen_name, String window_name) {

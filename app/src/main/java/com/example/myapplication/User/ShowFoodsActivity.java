@@ -33,6 +33,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
     private String my_canteen_name = "";
     private String my_window_name = "";
     private int now_user_id = 0;
+    private String now_food_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +41,19 @@ public class ShowFoodsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_foods);
         //data
         Intent intent = getIntent();
+        //可能为null
         my_canteen_name = intent.getStringExtra("canteen_name");
         my_window_name = intent.getStringExtra("window_name");
+        now_food_name = intent.getStringExtra("food_name");
+        //
         now_user_id = intent.getIntExtra("user_id", 0);
         //控件
         myRecycleView = findViewById(R.id.foodsRecyclerView);
         //标题
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(my_canteen_name + " " + my_window_name);//标题设置
+        if (my_window_name != null)
+            toolbar.setTitle(my_canteen_name + " " + my_window_name);//标题设置
         //视图于适配器绑定
         myFoodsListAdapter = new FoodsListAdapter();
         myRecycleView.setAdapter(myFoodsListAdapter);//一定要记得为控件配备适配器
@@ -59,22 +64,17 @@ public class ShowFoodsActivity extends AppCompatActivity {
             @Override
             public void onItemEnterCommentClick(int position) {
                 Intent intent = new Intent(ShowFoodsActivity.this, ShowFoodCommentActivity.class);
-                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
-                String now_food_name = tv_food_name.getText().toString();
-                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                int food_id = ((FoodInfo) getRecyclerViewItem(myRecycleView, position).getTag()).getFood_id();
                 FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
                 intent.putExtra("food_info", foodInfo);
                 intent.putExtra("now_user_id", now_user_id);
                 startActivity(intent);
-
             }
 
             @Override
             public void onItemAddOrderClick(int position) {
-                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
-                String now_food_name = tv_food_name.getText().toString();
-                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
-                FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
+                FoodInfo foodInfo = ((FoodInfo) getRecyclerViewItem(myRecycleView, position).getTag());
+                int food_id = foodInfo.getFood_id();
                 int food_cnt = Integer.parseInt(foodInfo.getFood_cnt());
                 String food_time = getTime();
                 if (food_cnt == 0) {
@@ -94,9 +94,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
             @Override
             public void onItemAddFavorClick(int position) {
-                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
-                String now_food_name = tv_food_name.getText().toString();
-                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                int food_id = ((FoodInfo) getRecyclerViewItem(myRecycleView, position).getTag()).getFood_id();
                 if (FavorDbHelper.getInstance(ShowFoodsActivity.this).isHasFavor(now_user_id, food_id, 1) != null) {
                     Toast.makeText(ShowFoodsActivity.this, "添加失败，已经收藏该菜品", Toast.LENGTH_SHORT).show();
                 } else {
@@ -112,7 +110,13 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
     public void loadData() {
         foodList.clear();
-        foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListData(my_canteen_name, my_window_name);
+        if (my_window_name != null) {
+            foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListData(my_canteen_name, my_window_name);
+            myFoodsListAdapter.setShow(false);
+        } else {
+            foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListDataByFoodName(now_food_name);
+            myFoodsListAdapter.setShow(true);
+        }
         myFoodsListAdapter.setDataList(foodList);
     }
 

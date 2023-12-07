@@ -20,6 +20,11 @@ import java.util.List;
 public class FoodsListAdapter extends RecyclerView.Adapter<FoodsListAdapter.MyHolder> {
     private List<FoodInfo> dataList = new ArrayList<>();//存储食物信息
     private FoodsListAdapter.FoodsListOnClickItemListener myFoodsListOnClickItemListener;
+    private boolean isShow = false;
+
+    public void setShow(boolean show) {
+        isShow = show;
+    }
 
     public void setDataList(List<FoodInfo> dataList) {
         this.dataList = dataList;
@@ -47,11 +52,16 @@ public class FoodsListAdapter extends RecyclerView.Adapter<FoodsListAdapter.MyHo
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
+        FoodInfo foodInfo = dataList.get(position);
         String foodName = dataList.get(position).getFood_name();
         int food_type = dataList.get(position).getFood_type();
         String food_price = dataList.get(position).getFood_price();
         String food_cnt = dataList.get(position).getFood_cnt();
-        holder.food_name.setText(foodName);
+        if (!isShow)
+            holder.food_name.setText(foodName);
+        else {
+            holder.food_name.setText(foodInfo.getCanteen_name() + " " + foodInfo.getWindow_name() + " " + foodInfo.getFood_name());
+        }
         if (food_type == 0)
             holder.food_type.setText("饮品");
         else if (food_type == 1) {
@@ -63,7 +73,8 @@ public class FoodsListAdapter extends RecyclerView.Adapter<FoodsListAdapter.MyHo
         holder.food_price.setText(food_price);
         food_cnt = "余" + food_cnt + "份";
         holder.food_cnt.setText(food_cnt);
-
+        //当前view与foodInfo绑定
+        holder.itemView.setTag(dataList.get(position));
         holder.itemView.findViewById(R.id.enter_comment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -32,6 +32,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
     private WindowListAdapter windowListAdapter;
     private List<String> dataList = new ArrayList<>();
     private String my_canteen_name = "";
+    private String now_window_name = "";
     private int now_user_id = 0;
 
     @Override
@@ -41,11 +42,11 @@ public class ShowWindowsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         my_canteen_name = intent.getStringExtra("canteen_name");
         now_user_id = intent.getIntExtra("user_id", 0);
-
+        now_window_name = intent.getStringExtra("window_name");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(my_canteen_name);//标题设置为食堂名
-
+        if (my_canteen_name != null)
+            toolbar.setTitle(my_canteen_name);//标题设置为食堂名
         myRecycleView = findViewById(R.id.windowRecyclerView);
         windowListAdapter = new WindowListAdapter(dataList);
         myRecycleView.setAdapter(windowListAdapter);//一定要记得为控件配备适配器
@@ -91,9 +92,16 @@ public class ShowWindowsActivity extends AppCompatActivity {
 
     public void loadData() {
         dataList.clear();
-        List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListData(my_canteen_name);
-        for (int i = 0; i < windowInfoList.size(); i++) {
-            dataList.add(windowInfoList.get(i).getWindow_name());
+        if (now_window_name == null) {
+            List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListData(my_canteen_name);
+            for (int i = 0; i < windowInfoList.size(); i++) {
+                dataList.add(windowInfoList.get(i).getWindow_name());
+            }
+        } else {
+            List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListDataByWindow_name(now_window_name);
+            for (int i = 0; i < windowInfoList.size(); i++) {
+                dataList.add(windowInfoList.get(i).getWindow_name());
+            }
         }
         windowListAdapter.setDataList(dataList);
     }
