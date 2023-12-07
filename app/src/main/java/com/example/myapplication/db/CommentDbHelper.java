@@ -82,4 +82,23 @@ public class CommentDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
+    public int deleteCommentBySend_user_id(int send_user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("comment_table", " send_user_id=? ", new String[]{send_user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    public int deleteCommentByReceive_user_id(int receive_user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("comment_table", " receive_user_id=? ", new String[]{receive_user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
 }

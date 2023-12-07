@@ -130,7 +130,6 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
-
     public int updateFood(int food_id, int history_id) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();

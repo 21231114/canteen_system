@@ -22,6 +22,7 @@ import com.example.myapplication.User.fragment.FavorFragment;
 import com.example.myapplication.User.fragment.HistoryFragment;
 import com.example.myapplication.User.fragment.HomeFragment;
 import com.example.myapplication.User.fragment.UserCenterFragment;
+import com.example.myapplication.db.CommentDbHelper;
 import com.example.myapplication.db.UserDbHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -111,25 +112,26 @@ public class MainActivity2 extends AppCompatActivity {
                     @Override
                     public void ModifyPassword() {
                         Intent intent = new Intent(MainActivity2.this, ModifyPasswordActivity.class);
-                        intent.putExtra("now_user_id",now_user_id);
+                        intent.putExtra("now_user_id", now_user_id);
                         startActivity(intent);
                     }
 
                     @Override
                     public void ModifyUsername() {
                         Intent intent = new Intent(MainActivity2.this, ModifyUsernameActivity.class);
-                        intent.putExtra("now_user_id",now_user_id);
+                        intent.putExtra("now_user_id", now_user_id);
                         startActivity(intent);
                     }
 
                     @Override
                     public void DeleteUser() {
                         int row = UserDbHelper.getInstance(MainActivity2.this).deleteUserById(now_user_id);
-                        if(row>0){
+                        if (row > 0) {
                             Toast.makeText(MainActivity2.this, "成功注销", Toast.LENGTH_SHORT).show();
+                            CommentDbHelper.getInstance(MainActivity2.this).deleteCommentByReceive_user_id(now_user_id);
+                            CommentDbHelper.getInstance(MainActivity2.this).deleteCommentBySend_user_id(now_user_id);
                             finish();
-                        }
-                        else{
+                        } else {
                             Toast.makeText(MainActivity2.this, "注销失败", Toast.LENGTH_SHORT).show();
                         }
                     }

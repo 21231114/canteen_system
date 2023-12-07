@@ -228,7 +228,6 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Toast.makeText(this, "好好好", Toast.LENGTH_SHORT).show();
         loadData();
         super.onResume();
     }

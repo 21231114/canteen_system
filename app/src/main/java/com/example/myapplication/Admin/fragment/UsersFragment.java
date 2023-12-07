@@ -18,6 +18,7 @@ import com.example.myapplication.Admin.adapter.UserListAdapter;
 import com.example.myapplication.Admin.dialog.AddUserActivity;
 import com.example.myapplication.Admin.dialog.ModifyRegisterTypeActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.db.CommentDbHelper;
 import com.example.myapplication.db.UserDbHelper;
 import com.example.myapplication.entity.UserInfo;
 
@@ -59,9 +60,13 @@ public class UsersFragment extends Fragment {
             public void onItemDeleteUserClick(int position) {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
                 String username = ((TextView) itemView.findViewById(R.id.user_name)).getText().toString();
+                UserInfo userInfo = UserDbHelper.getInstance(getActivity()).login(username);
+                int user_id = userInfo.getUser_id();
                 int row = UserDbHelper.getInstance(getActivity()).deleteUser(username);
                 if (row > 0) {
                     Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                    CommentDbHelper.getInstance(getActivity()).deleteCommentBySend_user_id(user_id);
+                    CommentDbHelper.getInstance(getActivity()).deleteCommentByReceive_user_id(user_id);
                     loadData();
                 } else {
                     Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
