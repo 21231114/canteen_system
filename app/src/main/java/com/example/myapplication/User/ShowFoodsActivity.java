@@ -19,11 +19,13 @@ import com.example.myapplication.db.FavorDbHelper;
 import com.example.myapplication.db.FoodDbHelper;
 import com.example.myapplication.db.HistoryDbHelper;
 import com.example.myapplication.entity.FoodInfo;
+import com.example.myapplication.entity.HistoryInfo;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class ShowFoodsActivity extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
     private String my_window_name = "";
     private int now_user_id = 0;
     private String now_food_name = "";
+    private String recommend_type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
         my_canteen_name = intent.getStringExtra("canteen_name");
         my_window_name = intent.getStringExtra("window_name");
         now_food_name = intent.getStringExtra("food_name");
+        recommend_type = intent.getStringExtra("type");
         //
         now_user_id = intent.getIntExtra("user_id", 0);
         //控件
@@ -113,9 +117,18 @@ public class ShowFoodsActivity extends AppCompatActivity {
         if (my_window_name != null) {
             foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListData(my_canteen_name, my_window_name);
             myFoodsListAdapter.setShow(false);
-        } else {
+        } else if (now_food_name != null) {
             foodList = FoodDbHelper.getInstance(ShowFoodsActivity.this).queryFoodListDataByFoodName(now_food_name);
             myFoodsListAdapter.setShow(true);
+        } else {
+            //此时是推荐功能
+            myFoodsListAdapter.setShow(true);
+            if (Objects.equals(recommend_type, "0")) {
+                //个性化
+                List<HistoryInfo> historyInfoList = HistoryDbHelper.getInstance(ShowFoodsActivity.this).queryHistoryListData(now_user_id);
+            } else {
+
+            }
         }
         myFoodsListAdapter.setDataList(foodList);
     }

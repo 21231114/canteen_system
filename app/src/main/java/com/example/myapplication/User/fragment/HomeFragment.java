@@ -123,6 +123,22 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+        rootView.findViewById(R.id.person_recommend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);
+                intent.putExtra("type", "0");//当前位个性化推荐
+                startActivity(intent);
+            }
+        });
+        rootView.findViewById(R.id.recommend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);
+                intent.putExtra("type", "1");//当前是总的推荐
+                startActivity(intent);
+            }
+        });
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         myRecycleView.addItemDecoration(dividerItemDecoration);
     }

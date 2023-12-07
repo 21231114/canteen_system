@@ -106,10 +106,10 @@ public class HistoryFragment extends Fragment {
     public void loadData() {
         dataList.clear();
         if (!isToday)
-            dataList = HistoryDbHelper.getInstance(getActivity()).queryHistoryListData();
+            dataList = HistoryDbHelper.getInstance(getActivity()).queryHistoryListData(now_user_id);
         else {
             String now_time = getTime().substring(0, 10);
-            dataList = HistoryDbHelper.getInstance(getActivity()).queryHistoryListDataByToday(now_time);
+            dataList = HistoryDbHelper.getInstance(getActivity()).queryHistoryListDataByToday(now_time,now_user_id);
         }
         for (int i = 0; i < dataList.size(); i++) {
             //如果菜品被删除，历史记录也随之删除

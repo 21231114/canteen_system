@@ -36,7 +36,7 @@
 
         <EditText
             android:id="@+id/search_content"
-            android:layout_width="350dp"
+            android:layout_width="125dp"
             android:layout_height="25dp"
             android:background="@drawable/login_et_bg"
             android:hint="搜索食堂,窗口,或菜品" />
@@ -48,7 +48,19 @@
             android:layout_marginLeft="5dp"
             android:text="搜索"
             android:textColor="@color/purple_500" />
+        <Button
+            android:id="@+id/person_recommend"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_height="50dp"
+            android:text="个性化推荐" />
 
+        <Button
+            android:id="@+id/recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:text="热榜" />
 
     </LinearLayout>
 

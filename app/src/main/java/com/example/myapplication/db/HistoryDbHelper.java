@@ -86,16 +86,15 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 //        return list;
 //    }
     @SuppressLint("Range")
-    public List<HistoryInfo> queryHistoryListData() {
+    public List<HistoryInfo> queryHistoryListData(int user_id) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getReadableDatabase();
         List<HistoryInfo> list = new ArrayList<>();
-        String sql = "select history_id,user_id,food_id,food_time from history_table";
-        Cursor cursor = db.rawQuery(sql, null);
+        String sql = "select history_id,user_id,food_id,food_time from history_table where user_id=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{user_id + ""});
         while (cursor.moveToNext()) {
             int history_id = cursor.getInt(cursor.getColumnIndex("history_id"));
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
-            int user_id = cursor.getInt(cursor.getColumnIndex("user_id"));
             String food_time = cursor.getString(cursor.getColumnIndex("food_time"));
             list.add(new HistoryInfo(history_id, user_id, food_id, food_time));
         }
@@ -105,16 +104,15 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public List<HistoryInfo> queryHistoryListDataByToday(String now_time) {
+    public List<HistoryInfo> queryHistoryListDataByToday(String now_time, int user_id) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getReadableDatabase();
         List<HistoryInfo> list = new ArrayList<>();
-        String sql = "select history_id,user_id,food_id,food_time from history_table where  substr(food_time,1,10)=?";
-        Cursor cursor = db.rawQuery(sql, new String[]{now_time});
+        String sql = "select history_id,user_id,food_id,food_time from history_table where  substr(food_time,1,10)=? and  user_id=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{now_time, user_id + ""});
         while (cursor.moveToNext()) {
             int history_id = cursor.getInt(cursor.getColumnIndex("history_id"));
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
-            int user_id = cursor.getInt(cursor.getColumnIndex("user_id"));
             String food_time = cursor.getString(cursor.getColumnIndex("food_time"));
             list.add(new HistoryInfo(history_id, user_id, food_id, food_time));
         }
