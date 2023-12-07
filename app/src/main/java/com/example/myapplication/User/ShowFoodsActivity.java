@@ -58,6 +58,14 @@ public class ShowFoodsActivity extends AppCompatActivity {
         myFoodsListAdapter.setMyFoodsListOnClickItemListener(new FoodsListAdapter.FoodsListOnClickItemListener() {
             @Override
             public void onItemEnterCommentClick(int position) {
+                Intent intent = new Intent(ShowFoodsActivity.this, ShowFoodCommentActivity.class);
+                TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
+                String now_food_name = tv_food_name.getText().toString();
+                int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);
+                FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
+                intent.putExtra("food_info", foodInfo);
+                intent.putExtra("now_user_id", now_user_id);
+                startActivity(intent);
 
             }
 

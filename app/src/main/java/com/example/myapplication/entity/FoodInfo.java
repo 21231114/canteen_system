@@ -1,6 +1,8 @@
 package com.example.myapplication.entity;
 
-public class FoodInfo {
+import java.io.Serializable;
+
+public class FoodInfo implements Serializable {
     private int food_id;
     private String food_name;
     private int food_type;
