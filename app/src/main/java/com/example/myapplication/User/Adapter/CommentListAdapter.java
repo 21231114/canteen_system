@@ -33,7 +33,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     public interface CommentListOnClickItemListener {
         void onItemReplyClick(int position);
 
-        void onItemFindDetailsClick(int position);
 
     }
 
@@ -59,6 +58,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             holder.comment_info.setText(send_user_name + "评论了");
         }
         holder.content.setText(content);
+        holder.itemView.setTag(commentInfo);
+        holder.itemView.findViewById(R.id.reply).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commentListOnClickItemListener.onItemReplyClick(position);
+            }
+        });
     }
 
     @Override

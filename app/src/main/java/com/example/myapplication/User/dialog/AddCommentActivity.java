@@ -26,15 +26,15 @@ public class AddCommentActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 int food_id = intent.getIntExtra("food_id", 0);
                 int send_user_id = intent.getIntExtra("send_user_id", 0);
+                int receive_user_id = intent.getIntExtra("receive_user_id", 0);
                 String content = et_content.getText().toString();
                 if (content.equals("")) {
                     Toast.makeText(AddCommentActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    int row = CommentDbHelper.getInstance(AddCommentActivity.this).addComment(send_user_id, food_id, 0, content);
-                    if(row>0){
+                    int row = CommentDbHelper.getInstance(AddCommentActivity.this).addComment(send_user_id, food_id, receive_user_id, content);
+                    if (row > 0) {
                         Toast.makeText(AddCommentActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(AddCommentActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
                     }
                     finish();

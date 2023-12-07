@@ -56,6 +56,18 @@ public class ShowFoodCommentActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        commentListAdapter.setCommentListOnClickItemListener(new CommentListAdapter.CommentListOnClickItemListener() {
+            @Override
+            public void onItemReplyClick(int position) {
+                View itemView = getRecyclerViewItem(myRecycleView, position);
+                CommentInfo commentInfo = (CommentInfo) itemView.getTag();
+                Intent intent = new Intent(ShowFoodCommentActivity.this, AddCommentActivity.class);
+                intent.putExtra("food_id", foodInfo.getFood_id());
+                intent.putExtra("send_user_id", now_user_id);
+                intent.putExtra("receive_user_id", commentInfo.getSend_user_id());
+                startActivity(intent);
+            }
+        });
         //设置分割线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         myRecycleView.addItemDecoration(dividerItemDecoration);
@@ -71,5 +83,18 @@ public class ShowFoodCommentActivity extends AppCompatActivity {
         commentList.clear();
         commentList = CommentDbHelper.getInstance(ShowFoodCommentActivity.this).queryCommentListDataByFoodId(foodInfo.getFood_id());
         commentListAdapter.setDataList(commentList);
+    }
+
+    public View getRecyclerViewItem(RecyclerView recyclerView, int position) {
+        if (recyclerView == null || recyclerView.getLayoutManager() == null || recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() <= 0) {
+            return null;
+        }
+        if (position > recyclerView.getAdapter().getItemCount()) {
+            return null;
+        }
+        RecyclerView.ViewHolder viewHolder = recyclerView.getAdapter().createViewHolder(recyclerView, recyclerView.getAdapter().getItemViewType(position));
+        recyclerView.getAdapter().onBindViewHolder(viewHolder, position);
+        viewHolder.itemView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        return viewHolder.itemView;
     }
 }

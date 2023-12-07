@@ -58,13 +58,6 @@
                 android:paddingLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="回复评论" />
-            <Button
-                android:id="@+id/find_details"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="评论详情" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
