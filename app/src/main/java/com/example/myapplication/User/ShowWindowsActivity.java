@@ -30,7 +30,7 @@ import java.util.List;
 public class ShowWindowsActivity extends AppCompatActivity {
     private RecyclerView myRecycleView;//当前展示列表的控件
     private WindowListAdapter windowListAdapter;
-    private List<String> dataList = new ArrayList<>();
+    private List<WindowInfo> dataList = new ArrayList<>();
     private String my_canteen_name = "";
     private String now_window_name = "";
     private int now_user_id = 0;
@@ -56,12 +56,11 @@ public class ShowWindowsActivity extends AppCompatActivity {
             @Override
             public void onItemEnterWindowClick(int position) {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
-                String now_window_name = "";//获取当前要查看的是哪个食堂
-                if (itemView != null) {
-                    now_window_name = ((TextView) (itemView.findViewById(R.id.window_name))).getText().toString();
-                }
+                WindowInfo windowInfo = (WindowInfo) itemView.getTag();
+                String now_window_name = windowInfo.getWindow_name();
+                String now_canteen_name = windowInfo.getCanteen_name();
                 Intent intent = new Intent(ShowWindowsActivity.this, ShowFoodsActivity.class);
-                intent.putExtra("canteen_name", my_canteen_name);
+                intent.putExtra("canteen_name", now_canteen_name);
                 intent.putExtra("window_name", now_window_name);
                 intent.putExtra("user_id", now_user_id);
                 //传递要查看的窗口信息
@@ -71,11 +70,7 @@ public class ShowWindowsActivity extends AppCompatActivity {
             @Override
             public void onItemAddFavorClick(int position) {
                 View itemView = getRecyclerViewItem(myRecycleView, position);
-                String now_window_name = "";//获取当前要查看的是哪个食堂
-                if (itemView != null) {
-                    now_window_name = ((TextView) (itemView.findViewById(R.id.window_name))).getText().toString();
-                }
-                WindowInfo windowInfo = WindowDbHelper.getInstance(ShowWindowsActivity.this).isHasWindow(my_canteen_name, now_window_name);
+                WindowInfo windowInfo = (WindowInfo) itemView.getTag();
                 int window_id = windowInfo.getWindow_id();
                 if (FavorDbHelper.getInstance(ShowWindowsActivity.this).isHasFavor(now_user_id, window_id, 2) != null) {
                     Toast.makeText(ShowWindowsActivity.this, "添加失败，已经收藏该窗口", Toast.LENGTH_SHORT).show();
@@ -93,15 +88,11 @@ public class ShowWindowsActivity extends AppCompatActivity {
     public void loadData() {
         dataList.clear();
         if (now_window_name == null) {
-            List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListData(my_canteen_name);
-            for (int i = 0; i < windowInfoList.size(); i++) {
-                dataList.add(windowInfoList.get(i).getWindow_name());
-            }
+            windowListAdapter.setShow(false);
+            dataList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListData(my_canteen_name);
         } else {
-            List<WindowInfo> windowInfoList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListDataByWindow_name(now_window_name);
-            for (int i = 0; i < windowInfoList.size(); i++) {
-                dataList.add(windowInfoList.get(i).getWindow_name());
-            }
+            windowListAdapter.setShow(true);
+            dataList = WindowDbHelper.getInstance(ShowWindowsActivity.this).queryWindowListDataByWindow_name(now_window_name);
         }
         windowListAdapter.setDataList(dataList);
     }

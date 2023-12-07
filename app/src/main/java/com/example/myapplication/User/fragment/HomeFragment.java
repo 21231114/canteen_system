@@ -76,7 +76,10 @@ public class HomeFragment extends Fragment {
                     now_canteen_name = null;
                 } else if (WindowDbHelper.getInstance(getActivity()).queryWindowListDataByWindow_name(search_content).size() != 0) {
                     //当前输入的是窗口名
-
+                    Intent intent = new Intent(getActivity(), ShowWindowsActivity.class);
+                    intent.putExtra("user_id", now_user_id);
+                    intent.putExtra("window_name", search_content);
+                    startActivity(intent);
                 } else if (FoodDbHelper.getInstance(getActivity()).queryFoodListDataByFoodName(search_content).size() != 0) {
                     //当前输入的是食物名
                     Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);

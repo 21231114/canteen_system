@@ -11,14 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entity.WindowInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.MyHolder> {
-    private List<String> dataList = new ArrayList<>();//存储食堂
+    private List<WindowInfo> dataList = new ArrayList<>();//存储食堂
+    private boolean isShow = false;
 
-    public WindowListAdapter(List<String> dataList) {
+    public void setShow(boolean show) {
+        isShow = show;
+    }
+
+    public WindowListAdapter(List<WindowInfo> dataList) {
         this.dataList = dataList;
     }
 
@@ -28,13 +34,14 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
         this.windowListOnClickItemListener = windowListOnClickItemListener;
     }
 
-    public void setDataList(List<String> dataList) {
+    public void setDataList(List<WindowInfo> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
 
     public interface WindowListOnClickItemListener {
         void onItemEnterWindowClick(int position);//接收点某个具体项菜单的操作函数
+
         void onItemAddFavorClick(int position);//接收点某个具体项菜单的操作函数
     }
 
@@ -47,8 +54,13 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull WindowListAdapter.MyHolder holder, @SuppressLint("RecyclerView") int position) {
-        String windowName = dataList.get(position);
-        holder.window_name.setText(windowName);
+        WindowInfo windowInfo = dataList.get(position);
+        holder.itemView.setTag(windowInfo);
+        if (!isShow) {
+            holder.window_name.setText(windowInfo.getWindow_name());
+        } else {
+            holder.window_name.setText(windowInfo.getCanteen_name() + " " + windowInfo.getWindow_name());
+        }
         holder.itemView.findViewById(R.id.enter_window).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
