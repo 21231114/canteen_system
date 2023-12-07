@@ -128,6 +128,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);
                 intent.putExtra("type", "0");//当前位个性化推荐
+                intent.putExtra("user_id",now_user_id);
                 startActivity(intent);
             }
         });
@@ -136,6 +137,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ShowFoodsActivity.class);
                 intent.putExtra("type", "1");//当前是总的推荐
+                intent.putExtra("user_id",now_user_id);
                 startActivity(intent);
             }
         });

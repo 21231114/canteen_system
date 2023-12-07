@@ -1,15 +1,16 @@
 package com.example.myapplication.entity;
 
 public class Recommend {
-    int history_id;
-    int user_id;
+    private  int recommend_id;
+    private int user_id;
 
-    public int getHistory_id() {
-        return history_id;
+    public int getRecommend_id() {
+
+        return recommend_id;
     }
 
-    public void setHistory_id(int history_id) {
-        this.history_id = history_id;
+    public void setRecommend_id(int recommend_id) {
+        this.recommend_id =  recommend_id;
     }
 
     public int getUser_id() {
@@ -36,13 +37,13 @@ public class Recommend {
         this.food_time = food_time;
     }
 
-    public Recommend(int history_id, int user_id, int food_id, String food_time) {
-        this.history_id = history_id;
+    public Recommend(int  recommend_id, int user_id, int food_id, String food_time) {
+        this.recommend_id =  recommend_id;
         this.user_id = user_id;
         this.food_id = food_id;
         this.food_time = food_time;
     }
 
-    int food_id;
+    private int food_id;
     String food_time;
 }
