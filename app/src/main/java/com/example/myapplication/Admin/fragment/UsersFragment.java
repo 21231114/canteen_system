@@ -19,7 +19,9 @@ import com.example.myapplication.Admin.dialog.AddUserActivity;
 import com.example.myapplication.Admin.dialog.ModifyRegisterTypeActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.db.CommentDbHelper;
+import com.example.myapplication.db.RecommendDbHelper;
 import com.example.myapplication.db.UserDbHelper;
+import com.example.myapplication.entity.Recommend;
 import com.example.myapplication.entity.UserInfo;
 
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class UsersFragment extends Fragment {
                     Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
                     CommentDbHelper.getInstance(getActivity()).deleteCommentBySend_user_id(user_id);
                     CommentDbHelper.getInstance(getActivity()).deleteCommentByReceive_user_id(user_id);
+                    RecommendDbHelper.getInstance(getActivity()).deleteRecommendByUser_id(user_id);
                     loadData();
                 } else {
                     Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();

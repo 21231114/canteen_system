@@ -36,7 +36,7 @@
 
         <EditText
             android:id="@+id/search_content"
-            android:layout_width="125dp"
+            android:layout_width="150dp"
             android:layout_height="25dp"
             android:background="@drawable/login_et_bg"
             android:hint="搜索食堂,窗口,或菜品" />

@@ -150,27 +150,29 @@ public class ShowFoodsActivity extends AppCompatActivity {
                     int food_id = recommend.getFood_id();
                     FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
                     if (foodInfo == null) {
-
-                    }
-                    int food_type = foodInfo.getFood_type();
-                    if (now_time == 1) {
-                        //当前是早饭
-                        if (food_type == 0 || food_type == 1) {
-                            if (treeMap.containsKey(food_id)) {
-                                int cnt = treeMap.get(food_id);
-                                treeMap.replace(food_id, cnt + 1);
-                            } else {
-                                treeMap.put(food_id, 1);
-                            }
-                        }
+                        //如果食物不存在应该删除对应recommend
+                        RecommendDbHelper.getInstance(ShowFoodsActivity.this).deleteRecommendByFood_id(food_id);
                     } else {
-                        //当前是正餐
-                        if (food_type == 0 || food_type == 2) {
-                            if (treeMap.containsKey(food_id)) {
-                                int cnt = treeMap.get(food_id);
-                                treeMap.replace(food_id, cnt + 1);
-                            } else {
-                                treeMap.put(food_id, 1);
+                        int food_type = foodInfo.getFood_type();
+                        if (now_time == 1) {
+                            //当前是早饭
+                            if (food_type == 0 || food_type == 1) {
+                                if (treeMap.containsKey(food_id)) {
+                                    int cnt = treeMap.get(food_id);
+                                    treeMap.replace(food_id, cnt + 1);
+                                } else {
+                                    treeMap.put(food_id, 1);
+                                }
+                            }
+                        } else {
+                            //当前是正餐
+                            if (food_type == 0 || food_type == 2) {
+                                if (treeMap.containsKey(food_id)) {
+                                    int cnt = treeMap.get(food_id);
+                                    treeMap.replace(food_id, cnt + 1);
+                                } else {
+                                    treeMap.put(food_id, 1);
+                                }
                             }
                         }
                     }
@@ -187,6 +189,36 @@ public class ShowFoodsActivity extends AppCompatActivity {
                 }
             } else {
                 recommendList = RecommendDbHelper.getInstance(ShowFoodsActivity.this).queryRecommendListData();
+                for (int i = 0; i < recommendList.size(); i++) {
+                    Recommend recommend = recommendList.get(i);
+                    String food_time = recommend.getFood_time();
+                    int food_id = recommend.getFood_id();
+                    FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
+                    if (foodInfo == null) {
+                        //如果食物不存在应该删除对应recommend
+                        RecommendDbHelper.getInstance(ShowFoodsActivity.this).deleteRecommendByFood_id(food_id);
+                    } else {
+                        if (isIllegal(time, food_time)) {
+                            if (treeMap.containsKey(food_id)) {
+                                int cnt = treeMap.get(food_id);
+                                treeMap.replace(food_id, cnt + 1);
+                            } else {
+                                treeMap.put(food_id, 1);
+                            }
+                        }
+                    }
+                }
+                TreeSet<Sort> treeSet = new TreeSet<>();
+                for (Map.Entry<Integer, Integer> entry : treeMap.entrySet()) {
+                    int food_id = entry.getKey();
+                    int food_cnt = entry.getValue();
+                    treeSet.add(new Sort(food_cnt, food_id));
+                }
+                for (Sort sort : treeSet) {
+                    //Toast.makeText(this, sort.getFood_id() + " " + sort.getCnt(), Toast.LENGTH_SHORT).show();
+                    FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(sort.getFood_id());
+                    foodList.add(foodInfo);
+                }
             }
         }
         myFoodsListAdapter.setDataList(foodList);
@@ -230,5 +262,17 @@ public class ShowFoodsActivity extends AppCompatActivity {
     protected void onResume() {
         loadData();
         super.onResume();
+    }
+
+    public boolean isIllegal(String now_time, String food_time) {
+        String now_date = now_time.substring(0, 11);
+        String food_date = now_time.substring(0, 11);
+        int now_moment = Integer.parseInt(now_time.substring(11, 13));
+        int food_moment = Integer.parseInt(food_time.substring(11, 13));
+        if (now_date.equals(food_date)) {
+            if (now_moment - food_moment <= 3) return true;
+            //根据同一天，大约三小时内的热度榜
+        }
+        return false;
     }
 }

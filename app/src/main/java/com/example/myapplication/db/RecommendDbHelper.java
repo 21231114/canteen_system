@@ -31,6 +31,13 @@ public class RecommendDbHelper extends SQLiteOpenHelper {
                 "food_id integer," +
                 "food_time text" +//浏览(即查看评论)或者点单的时间
                 ")");
+
+        ContentValues values = new ContentValues();
+        values.put("user_id", 1);
+        values.put("food_id", 1);
+        values.put("food_time", "2023-12-06 08:00:00");
+        String nullColumnHack = "values(null,?,?,?)";
+        db.insert("recommend_table", nullColumnHack, values);
     }
 
     @Override
@@ -96,5 +103,23 @@ public class RecommendDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return list;
+    }
+    public int deleteRecommendByFood_id(int food_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("recommend_table", "food_id=? ", new String[]{food_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+    public int deleteRecommendByUser_id(int user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("recommend_table", "user_id=? ", new String[]{user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
     }
 }
