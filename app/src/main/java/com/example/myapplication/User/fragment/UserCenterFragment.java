@@ -57,8 +57,7 @@ public class UserCenterFragment extends Fragment {
                 addUserCenterOnClickItemListener.AddToolBar();
             }
         });
-        UserInfo userInfo = UserDbHelper.getInstance(getActivity()).findUserById(now_user_id);
-        tv_username.setText(userInfo.getUsername());
+        loadData();
         rootView.findViewById(R.id.modify_password).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,5 +76,9 @@ public class UserCenterFragment extends Fragment {
                 addUserCenterOnClickItemListener.DeleteUser();
             }
         });
+    }
+    public  void loadData(){
+        UserInfo userInfo = UserDbHelper.getInstance(getActivity()).findUserById(now_user_id);
+        tv_username.setText(userInfo.getUsername());
     }
 }

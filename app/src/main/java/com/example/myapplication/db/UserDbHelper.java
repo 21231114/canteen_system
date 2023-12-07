@@ -153,7 +153,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 执行SQL
-        int delete = db.delete("user_table", "user_id=?", new String[]{ user_id+""});
+        int delete = db.delete("user_table", "user_id=?", new String[]{user_id + ""});
         // 关闭数据库连接
         db.close();
         return delete;
@@ -185,6 +185,30 @@ public class UserDbHelper extends SQLiteOpenHelper {
         return update;
     }
 
+    public int updatePasswordById(int user_id, String password) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("password", password);
+        // 执行SQL
+        int update = db.update("user_table", values, "user_id=?", new String[]{user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
+    public int updateUsernameById(int user_id, String username) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 填充占位符
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        // 执行SQL
+        int update = db.update("user_table", values, "user_id=?", new String[]{user_id + ""});
+        // 关闭数据库连接
+        db.close();
+        return update;
+    }
     public int updateRegisterType(String username, int register_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();

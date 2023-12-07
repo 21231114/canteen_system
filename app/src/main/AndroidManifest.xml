@@ -91,6 +91,14 @@
             android:name=".User.dialog.ModifyHistoryFoodActivity"
             android:exported="false"
             android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".User.dialog.ModifyPasswordActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
+        <activity
+            android:name=".User.dialog.ModifyUsernameActivity"
+            android:exported="false"
+            android:theme="@style/DialogActivity" />
     </application>
 
 </manifest>

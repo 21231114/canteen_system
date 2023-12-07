@@ -16,6 +16,8 @@ import com.example.myapplication.Admin.adapter.FoodListAdapter;
 import com.example.myapplication.Admin.fragment.UsersFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.User.Adapter.CanteenListAdapter;
+import com.example.myapplication.User.dialog.ModifyPasswordActivity;
+import com.example.myapplication.User.dialog.ModifyUsernameActivity;
 import com.example.myapplication.User.fragment.FavorFragment;
 import com.example.myapplication.User.fragment.HistoryFragment;
 import com.example.myapplication.User.fragment.HomeFragment;
@@ -108,12 +110,16 @@ public class MainActivity2 extends AppCompatActivity {
 
                     @Override
                     public void ModifyPassword() {
-
+                        Intent intent = new Intent(MainActivity2.this, ModifyPasswordActivity.class);
+                        intent.putExtra("now_user_id",now_user_id);
+                        startActivity(intent);
                     }
 
                     @Override
                     public void ModifyUsername() {
-
+                        Intent intent = new Intent(MainActivity2.this, ModifyUsernameActivity.class);
+                        intent.putExtra("now_user_id",now_user_id);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -164,8 +170,8 @@ public class MainActivity2 extends AppCompatActivity {
         if (favorFragment != null) {
             favorFragment.loadData();
         }
-//        if (homeFragment != null) {
-//            omeFragment.loadData();
-//        }
+        if (userCenterFragment != null) {
+            userCenterFragment.loadData();//用户名可能更新
+        }
     }
 }
