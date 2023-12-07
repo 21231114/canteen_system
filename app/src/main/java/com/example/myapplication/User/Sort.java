@@ -27,10 +27,10 @@ public class Sort implements Comparable<Sort> {
 
     @Override
     public int compareTo(Sort sort) {
-        if (food_id == sort.food_id) {
+        if (food_id == sort.getFood_id()) {
             return 0;//代表是同一个对象
         }
-        if (cnt > sort.cnt) {
+        if (cnt > sort.getCnt()) {
             return -1;//浏览与点单多的在前
         } else {
             return 1;

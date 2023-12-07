@@ -26,6 +26,7 @@ import com.example.myapplication.entity.Recommend;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -77,15 +78,15 @@ public class ShowFoodsActivity extends AppCompatActivity {
         myFoodsListAdapter.setMyFoodsListOnClickItemListener(new FoodsListAdapter.FoodsListOnClickItemListener() {
             @Override
             public void onItemEnterCommentClick(int position) {
-                Intent intent = new Intent(ShowFoodsActivity.this, ShowFoodCommentActivity.class);
+                Intent intent1 = new Intent(ShowFoodsActivity.this, ShowFoodCommentActivity.class);
                 int food_id = ((FoodInfo) getRecyclerViewItem(myRecycleView, position).getTag()).getFood_id();
                 String food_time = getTime();
                 RecommendDbHelper.getInstance(ShowFoodsActivity.this).addRecommend(now_user_id, food_id, food_time);//查看评论时加，视为浏览
 
                 FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
-                intent.putExtra("food_info", foodInfo);
-                intent.putExtra("now_user_id", now_user_id);
-                startActivity(intent);
+                intent1.putExtra("food_info", foodInfo);
+                intent1.putExtra("now_user_id", now_user_id);
+                startActivity(intent1);
             }
 
             @Override
@@ -137,9 +138,10 @@ public class ShowFoodsActivity extends AppCompatActivity {
         } else {
             //此时是推荐功能
             List<Recommend> recommendList = new ArrayList<>();
-            int now_time = timeIs(getTime());
+            String time = getTime();
+            int now_time = timeIs(time);
             myFoodsListAdapter.setShow(true);
-            TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+            HashMap<Integer, Integer> treeMap = new HashMap<>();
             if (Objects.equals(recommend_type, "0")) {
                 //个性化
                 recommendList = RecommendDbHelper.getInstance(ShowFoodsActivity.this).queryRecommendListDataByUserId(now_user_id);
@@ -147,14 +149,16 @@ public class ShowFoodsActivity extends AppCompatActivity {
                     Recommend recommend = recommendList.get(i);
                     int food_id = recommend.getFood_id();
                     FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(food_id);
+                    if (foodInfo == null) {
+
+                    }
                     int food_type = foodInfo.getFood_type();
                     if (now_time == 1) {
                         //当前是早饭
                         if (food_type == 0 || food_type == 1) {
                             if (treeMap.containsKey(food_id)) {
                                 int cnt = treeMap.get(food_id);
-                                treeMap.remove(food_id);
-                                treeMap.put(food_id, cnt + 1);
+                                treeMap.replace(food_id, cnt + 1);
                             } else {
                                 treeMap.put(food_id, 1);
                             }
@@ -164,8 +168,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
                         if (food_type == 0 || food_type == 2) {
                             if (treeMap.containsKey(food_id)) {
                                 int cnt = treeMap.get(food_id);
-                                treeMap.remove(food_id);
-                                treeMap.put(food_id, cnt + 1);
+                                treeMap.replace(food_id, cnt + 1);
                             } else {
                                 treeMap.put(food_id, 1);
                             }
@@ -173,15 +176,12 @@ public class ShowFoodsActivity extends AppCompatActivity {
                     }
                 }
                 TreeSet<Sort> treeSet = new TreeSet<>();
-                while (!treeMap.isEmpty()) {
-                    int food_id = treeMap.firstKey();
-                    int food_cnt = treeMap.get(food_id);
-                    treeMap.remove(food_id);
+                for (Map.Entry<Integer, Integer> entry : treeMap.entrySet()) {
+                    int food_id = entry.getKey();
+                    int food_cnt = entry.getValue();
                     treeSet.add(new Sort(food_cnt, food_id));
                 }
-                while (!treeSet.isEmpty()) {
-                    Sort sort = treeSet.first();
-                    treeSet.remove(sort);
+                for (Sort sort : treeSet) {
                     FoodInfo foodInfo = FoodDbHelper.getInstance(ShowFoodsActivity.this).isHasFoodByFoodId(sort.getFood_id());
                     foodList.add(foodInfo);
                 }
@@ -224,5 +224,12 @@ public class ShowFoodsActivity extends AppCompatActivity {
         } else {
             return 0;//提供正餐（午餐和晚餐）
         }
+    }
+
+    @Override
+    protected void onResume() {
+        Toast.makeText(this, "好好好", Toast.LENGTH_SHORT).show();
+        loadData();
+        super.onResume();
     }
 }
