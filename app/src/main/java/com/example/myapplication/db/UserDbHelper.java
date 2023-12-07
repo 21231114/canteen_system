@@ -83,6 +83,25 @@ public class UserDbHelper extends SQLiteOpenHelper {
         return userInfo;
     }
 
+    @SuppressLint("Range")//减少警告
+    public UserInfo findUserById(int user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        UserInfo userInfo = null;
+        String sql = "select user_id,username,password,register_type  from user_table where user_id=?";
+        String[] selectionArgs = {user_id + ""};//查询条件
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            String username = cursor.getString(cursor.getColumnIndex("username"));
+            String password = cursor.getString(cursor.getColumnIndex("password"));
+            int register_type = cursor.getInt(cursor.getColumnIndex("register_type"));
+            userInfo = new UserInfo(user_id, username, password, register_type);
+        }
+        cursor.close();
+        db.close();
+        return userInfo;
+    }
+
     //实现注册
     public int register(String username, String password, int register_type) {
         //获取SQLiteDatabase实例
@@ -119,6 +138,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
     public int deleteUser(String username) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -128,6 +148,17 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return delete;
     }
+
+    public int deleteUserById(int user_id) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getWritableDatabase();
+        // 执行SQL
+        int delete = db.delete("user_table", "user_id=?", new String[]{ user_id+""});
+        // 关闭数据库连接
+        db.close();
+        return delete;
+    }
+
     public int initPassword(String username) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
@@ -140,7 +171,8 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-    public int updatePassword(String username,String password) {
+
+    public int updatePassword(String username, String password) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 填充占位符
@@ -152,7 +184,8 @@ public class UserDbHelper extends SQLiteOpenHelper {
         db.close();
         return update;
     }
-    public int updateRegisterType(String username,int register_type) {
+
+    public int updateRegisterType(String username, int register_type) {
         //获取SQLiteDatabase实例
         SQLiteDatabase db = getWritableDatabase();
         // 填充占位符

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.myapplication.Admin.adapter.FoodListAdapter;
 import com.example.myapplication.Admin.fragment.UsersFragment;
@@ -19,6 +20,7 @@ import com.example.myapplication.User.fragment.FavorFragment;
 import com.example.myapplication.User.fragment.HistoryFragment;
 import com.example.myapplication.User.fragment.HomeFragment;
 import com.example.myapplication.User.fragment.UserCenterFragment;
+import com.example.myapplication.db.UserDbHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Objects;
@@ -98,6 +100,34 @@ public class MainActivity2 extends AppCompatActivity {
             if (userCenterFragment == null) {
                 //还没有加载过这个布局
                 userCenterFragment = new UserCenterFragment(now_user_id);
+                userCenterFragment.setAddUserCenterOnClickItemListener(new UserCenterFragment.AddUserCenterOnClickItemListener() {
+                    @Override
+                    public void AddToolBar() {
+                        finish();//退出登录
+                    }
+
+                    @Override
+                    public void ModifyPassword() {
+
+                    }
+
+                    @Override
+                    public void ModifyUsername() {
+
+                    }
+
+                    @Override
+                    public void DeleteUser() {
+                        int row = UserDbHelper.getInstance(MainActivity2.this).deleteUserById(now_user_id);
+                        if(row>0){
+                            Toast.makeText(MainActivity2.this, "成功注销", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        else{
+                            Toast.makeText(MainActivity2.this, "注销失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 fragmentTransaction.add(R.id.content, userCenterFragment);
             } else {
                 fragmentTransaction.show(userCenterFragment);
