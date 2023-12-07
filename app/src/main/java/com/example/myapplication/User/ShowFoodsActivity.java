@@ -63,7 +63,6 @@ public class ShowFoodsActivity extends AppCompatActivity {
 
             @Override
             public void onItemAddOrderClick(int position) {
-                //Todo:差余量，该余量
                 TextView tv_food_name = getRecyclerViewItem(myRecycleView, position).findViewById(R.id.food_name);
                 String now_food_name = tv_food_name.getText().toString();
                 int food_id = getItemFoodId(my_canteen_name, my_window_name, now_food_name);

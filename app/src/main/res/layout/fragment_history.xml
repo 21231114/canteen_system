@@ -37,12 +37,22 @@
 
                 <Button
                     android:id="@+id/find_today"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginLeft="100dp"
-                    android:text="仅查看今天" />
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="查看今天" />
+
+                <Button
+                    android:id="@+id/find_all"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="1"
+                    android:text="查看全部" />
+
 
             </LinearLayout>
 

@@ -38,6 +38,12 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
                 "food_id integer," +
                 "food_time text" +//点单时间
                 ")");
+        ContentValues values = new ContentValues();
+        values.put("user_id", 1);
+        values.put("food_id", 1);
+        values.put("food_time", "2023-12-06 08:00:00");
+        String nullColumnHack = "values(null,?,?,?)";
+        db.insert("history_table", nullColumnHack, values);
     }
 
     @Override
@@ -86,6 +92,25 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         List<HistoryInfo> list = new ArrayList<>();
         String sql = "select history_id,user_id,food_id,food_time from history_table";
         Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int history_id = cursor.getInt(cursor.getColumnIndex("history_id"));
+            int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
+            int user_id = cursor.getInt(cursor.getColumnIndex("user_id"));
+            String food_time = cursor.getString(cursor.getColumnIndex("food_time"));
+            list.add(new HistoryInfo(history_id, user_id, food_id, food_time));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    @SuppressLint("Range")
+    public List<HistoryInfo> queryHistoryListDataByToday(String now_time) {
+        //获取SQLiteDatabase实例
+        SQLiteDatabase db = getReadableDatabase();
+        List<HistoryInfo> list = new ArrayList<>();
+        String sql = "select history_id,user_id,food_id,food_time from history_table where  substr(food_time,1,10)=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{now_time});
         while (cursor.moveToNext()) {
             int history_id = cursor.getInt(cursor.getColumnIndex("history_id"));
             int food_id = cursor.getInt(cursor.getColumnIndex("food_id"));
